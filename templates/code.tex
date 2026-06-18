@@ -1,0 +1,65 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% C# example
+\begin{minted}{csharp}
+var before = tracks.Count;
+
+if (tracks.Any(track => track.TrackId != null))
+{
+    tracks = tracks
+        .GroupBy(track => track.TrackId)
+        .Select(group => group.First())
+        .ToList();
+}
+
+const int maxDurationMs = 600_000;
+const double minTempo = 30;
+const double minLoudness = -40;
+
+var cleaned = tracks
+    .Where(track =>
+        track.DurationMs <= maxDurationMs &&
+        track.Tempo >= minTempo &&
+        track.Loudness >= minLoudness &&
+        track.TimeSignature > 0 &&
+        track.Danceability > 0)
+    .ToList();
+\end{minted}
+
+% TypeScript example
+\begin{minted}{typescript}
+const before = tracks.length;
+
+if (tracks.some((track) => track.trackId !== undefined)) {
+  const seen = new Set<string>();
+
+  tracks = tracks.filter((track) => {
+    if (track.trackId === undefined) {
+      return true;
+    }
+
+    if (seen.has(track.trackId)) {
+      return false;
+    }
+
+    seen.add(track.trackId);
+    return true;
+  });
+}
+
+const maxDurationMs = 600_000;
+const minTempo = 30;
+const minLoudness = -40;
+
+const cleaned = tracks.filter(
+  (track) =>
+    track.durationMs <= maxDurationMs &&
+    track.tempo >= minTempo &&
+    track.loudness >= minLoudness &&
+    track.timeSignature > 0 &&
+    track.danceability > 0,
+);
+\end{minted}
+
+\end{document}

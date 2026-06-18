@@ -1,0 +1,41 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% Bullet points
+\begin{itemize}
+    \item One
+    \item Two
+\end{itemize}
+
+% Numbered list
+\begin{enumerate}
+    \item First step
+    \item Second step
+    \item Third step
+\end{enumerate}
+
+% Description list
+\begin{description}
+    \item[Precision] Measures how many selected items are relevant.
+    \item[Recall] Measures how many relevant items were selected.
+    \item[F1-score] Harmonic mean of precision and recall.
+\end{description}
+
+% Nested list
+\begin{itemize}
+    \item Data cleaning
+    \begin{enumerate}
+        \item Remove duplicates
+        \item Filter invalid values
+        \item Normalize columns
+    \end{enumerate}
+
+    \item Model training
+    \begin{itemize}
+        \item Split dataset
+        \item Train model
+        \item Evaluate model
+    \end{itemize}
+\end{itemize}
+
+\end{document}
