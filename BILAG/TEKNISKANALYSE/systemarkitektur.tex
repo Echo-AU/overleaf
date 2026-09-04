@@ -1,9 +1,15 @@
 \documentclass[../main.tex]{subfiles}\begin{document}
 \section{Systemarkitektur}
-Følgende beskriver bla bla bla. Der er lavet en analyse på baggrund af følgende valg: bla bla bla.
+Dette afsnit analyserer mulige systemarkitekturer for Echo og vurderer, hvilken arkitektur der bedst understøtter projektets funktionelle og ikke-funktionelle krav. Analysen tager udgangspunkt i tre relevante arkitekturkandidater: monolith, microservices og modular monolith. Formålet er både at vurdere, hvilken løsning der passer bedst til produktet som MVP, og hvilken løsning der giver det bedste grundlag for teknisk refleksion, dokumentation og videre arbejde i bachelorprojektet.
+
+Echo er en platform med flere forskellige brugerroller, hvor Contributors, Requesters, Organizations og Reward Partners interagerer gennem opgaver, belønninger, betalinger og ratings. Arkitekturen skal derfor ikke kun understøtte almindelig brugerhåndtering, men også workflows hvor opgavestatus, saldo, transaktionshistorik, Karma Koins og omdømme hænger sammen. Valget af arkitektur har derfor betydning for både udviklingshastighed, sikkerhed, datakonsistens, maintainability og hvor tydeligt systemets opbygning kan dokumenteres i rapportens diagrammer.
 
 % Krav
-Hvad har \textbf{jeres produkt} brug for?\\
+Den valgte arkitektur skal først og fremmest kunne håndtere Echos rollebaserede adgangskontrol. Systemet skal sikre, at brugere kun kan udføre handlinger, der passer til deres rolle, eksempelvis at en Reward Partner kan oprette rewards, mens en Organization eller Requester kan oprette og tildele opgaver. Derudover skal arkitekturen understøtte sikker login- og sessionshåndtering, herunder beskyttelse af adgangskoder, JWT-baserede sessions og beskyttelse mod SQL injection.
+
+Arkitekturen skal også understøtte høj datakonsistens i de centrale workflows. Når en opgave markeres som udført, kan det påvirke opgavestatus, betaling, Karma Koin-overførsel, transaktionshistorik og efterfølgende rating. Disse handlinger skal kunne gennemføres på en måde, hvor data ikke ender i modstrid med hinanden. Dette er særligt vigtigt, fordi Echo arbejder med saldo, belønninger og betaling, hvor fejl kan have direkte betydning for brugernes tillid til platformen.
+
+Ud over sikkerhed og konsistens skal arkitekturen kunne understøtte de ikke-funktionelle krav til performance, fejltolerance og supportability. Sider bør kunne indlæses inden for 5 sekunder, API-kald bør besvares inden for 500 ms, og emails skal kunne leveres inden for 2 minutter. Samtidig skal systemet kunne håndtere fejl uden at hele platformen går ned, og kodebasen skal være struktureret, dokumenteret og testbar, så gruppen kan arbejde med SOLID-principper og opnå en høj backend-testdækning.
 
 
 % Kandidater
@@ -148,12 +154,5 @@ Echo har samtidig nogle naturlige domænegrænser, som gør microservices releva
 Microservices kan desuden styrke rapportens diagramarbejde. På C4 container-niveau kan arkitekturen visualisere frontend, API-lag, user-service, task-service, payment-reward-service, notification-service og deres databaser eller kommunikationskanaler. Det giver mere konkrete diagrammer at analysere, fordi relationerne mellem systemets dele bliver synlige: hvilke services der ejer hvilke data, hvilke kald der er synkrone, hvilke processer der kan være asynkrone, og hvor fejl kan isoleres. På den måde bliver arkitekturen ikke kun et implementeringsvalg, men også et tydeligt grundlag for rapportens tekniske refleksion.
 
 Valget af microservices bør dog beskrives som et bevidst kompromis. For en første MVP er arkitekturen sandsynligvis mere kompleks end nødvendigt, og den vil kræve mere arbejde med drift, kommunikation mellem services og håndtering af inkonsistente data. Til gengæld giver den gruppen et stærkere udgangspunkt for at vise læring, refleksion og teknisk modenhed i rapporten. En realistisk kompromisløsning vil derfor være at implementere en begrænset microservice-inspireret arkitektur med få centrale services, eksempelvis user-service, task-service, payment-reward-service og notification-service, frem for en fuld enterprise-lignende microservice-platform.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{IMG/BILAG/TEKNISKANALYSE/arkitektur-mock.png}
-    \caption{Mock arkitektur}
-    \label{fig:mock-arkitektur}
-\end{figure}
 
 \end{document}
