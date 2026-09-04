@@ -156,7 +156,7 @@
     \vspace*{2cm}
     \textbf{Echo}\\
     \vspace{0.5cm}
-    SW - Fall 2026
+    Bilag A - Tekniskanalyse
 }
 \author{Group: X}
 \date{mm dd, 2026\\
@@ -183,25 +183,84 @@
 \tableofcontents
 \newpage
 
+% Intro
+Følgende dokument indeholder den fulde tekniske analyse lavet i forbindelse med Echo projektet. Følgende skala er blevet brugt til og lave en vurdering for hver teknologi analyseret:
+\begin{enumerate}
+    \item Ekstremt dårligt
+    \item Meget dårligt
+    \item Dårligt
+    \item Under middel
+    \item Acceptabelt
+    \item Tilfredsstillende
+    \item Godt
+    \item Meget godt
+    \item Fremragende
+    \item Enestående
+\end{enumerate}
+
+Hver afsnit er analyseret og vil få en score baseret på følgende kriterier. Hver kriterie inkluderer også en vægt for den samlet score:
+
+% TODO: Fix table
+\begin{table}[htbp]
+    \centering
+    \caption{Vægtning af kriterier}
+    \label{tab:kriterier-vaegt}
+    \begin{tabular}{l c}
+        \hline
+        \textbf{Kriterium} & \textbf{Vægt} \\
+        \hline
+        Egnethed til projektet & 15\% \\
+        Udviklingshastighed & 10\% \\
+        Maintainability & 10\% \\
+        Performance & 5\% \\
+        Kompetencer i gruppen & 10\% \\
+        Ecosystem/tooling & 5\% \\
+        Fremtidig skalerbarhed & 5\% \\
+        Teknologi specifikke kriterier & 40\% \\
+        \hline
+    \end{tabular}
+\end{table} 
+
 % MAIN PAGES
-\subfile{V1/1-resume}
-\subfile{V1/2-forord}
-\subfile{V1/3-ordliste}
-\subfile{V1/4-indledning}
-\subfile{V1/5-kravspec}
-\subfile{V1/6-afgraensninger}
-\subfile{V1/7-analyse}
-\subfile{V1/8-arkitektur}
-\subfile{V1/9-design}
-\subfile{V1/10-implementering}
-\subfile{V1/11-test}
-\subfile{V1/12-resultat}
-\subfile{V1/13-diskussion}
-\subfile{V1/14-konklusion}
+\subfile{BILAG/TEKNISKANALYSE/systemarkitektur}
+% \subfile{BILAG/TEKNISKANALYSE/backend}
+% \subfile{BILAG/TEKNISKANALYSE/frontend}
+% \subfile{BILAG/TEKNISKANALYSE/database}
+% \subfile{BILAG/TEKNISKANALYSE/deployment}
 
-
+% Konklusion
 \newpage
-\bibliographystyle{plain}
-\bibliography{bibliography/external, bibliography/libraries}
+Følgende table indeholder gruppens samledet valg af tekniske værktøjer til udførsel af projektet:\\
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \rowcolor{gray!30}
+    \textbf{Domæne} & \textbf{Valgte teknologi} & \textbf{Score} & \textbf{Begrundelse} \\
+    \hline
+    % Q: Kan vi lave dette som stjerner?
+    Arkitektur & Microservices & 7/10 & Det fucking sejt jo \\
+    \hline
+    Backend & - & - & - \\
+    \hline
+    Frontend & - & - & - \\
+    \hline
+    Database & - & - & - \\
+    \hline
+    API ? & - & - & - \\
+    \hline
+    Auth ? & - & - & - \\
+    \hline
+    Containerization ? & - & - & - \\
+    \hline
+    Hosting ? & - & - & - \\
+    \hline
+    CI/CD ? & - & - & - \\
+    \hline
+    Repository ? & - & - & - \\
+    \hline
+\end{tabular}
+
+% \newpage
+% \bibliographystyle{plain}
+% \bibliography{bibliography/external, bibliography/libraries}
 \end{document}
 

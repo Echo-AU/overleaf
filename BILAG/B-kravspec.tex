@@ -1,0 +1,283 @@
+\documentclass[../main.tex]{subfiles}\begin{document}
+\section{Kravspecifikation}
+Følgende dokument beskriver gruppens arbejde med udvikling af kravspecifikation for projektet Echo. Dokumentet indeholder gennemgang af de \textbf{Epics} som gruppen har oprettet, \textbf{Funktionelle} \& \textbf{ikke-funktionelle krav}, samt prioritering i overenstemmelse med \textbf{MoSCow}-modellen.
+
+Det skal forstås 
+
+\subsection{Aktør-kontekst}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{IMG/BILAG/ac2.png}
+    \caption{Aktør-kontekst diagram}
+    \label{fig:ac-diagram}
+\end{figure}
+
+% Epics
+\subsection{Epics}
+Følgende Epics er opsat til og inddele udviklingen af projektet i:
+
+\begin{enumerate}
+    {\color{blue}\item Konto, Identitet \& Sikkerhed}
+    {\color{red}\item Opgaver}
+    {\color{green!60!black}\item Belønning}
+    {\color{violet}\item Ratings}
+\end{enumerate}
+
+% User Stories (Funktionelle)
+
+\subsection{User Stories}
+Forneden har gruppen redegjort for de forskellige US som projektet skal kunne opfylde, inddelt i de opsatte Epics. \textbf{User} bruges som "umbrella term" for contributor, requester, organization og reward partner i scenarier hvor alle typer af brugere kan udnytte user storien.
+
+% nyt udkast
+
+\subsubsection*{Epic 1 -- Konto, Identitet \& Sikkerhed}
+\paragraph{US-01}
+Som \textbf{User} skal jeg kunne oprette en konto som \textbf{Contributor/Requester, Organization} eller \textbf{Reward Partner}, så jeg kan deltage på platformen.
+
+\paragraph{US-02}
+Som \textbf{User} kan jeg vedligeholde en profil med relevante oplysninger om mig selv, så andre deltagere kan træffe en informeret beslutning om at interagere med mig.
+
+\paragraph{US-03}
+Som \textbf{User} skal jeg kunne gennemgå min saldo \& transaktionshistorik, for at have et overblik over mine tidligere handlinger.
+% Saldo og transaktioner vil være baseret på typen af Konto 
+
+\paragraph{US-04}
+Som \textbf{User} skal mine handlinger kunne begrænses til min User Rolle, så jeg IKKE kan udføre handlinger jeg ikke er autoriseret til.
+
+\subsubsection*{Epic 2 -- Opgaver}
+\paragraph{US-05}
+Som en \textbf{Organization} skal jeg kunne oprette og offentliggøre aktiviteter, så \textbf{Contributors} kan finde og tilmelde sig dem for at bidrage til min organisations formål. (Acceptkriterie: Opgaven skal skifte status til "udført", når betingelserne er opfyldt)
+
+\paragraph{US-06}
+Som en \textbf{Organization} skal jeg kunne se hvem der har tilmeldt sig mine aktiviteter, så jeg kan håndtere deltagelsen.
+
+\paragraph{US-07}
+Som \textbf{Requester} bør jeg kunne oprette en opgave, der beskriver den hjælp, jeg har brug for, så \textbf{Contributors} kan tilbyde at udføre den. Efter udførsel vil opgaven markes "udført".
+
+\paragraph{US-08a}
+Som en \textbf{Contributor} skal jeg kunne gennemse tilgængelige opgaver fra \textbf{Organizations} og acceptere dem, der er relevante for mig.
+
+\paragraph{US-08b}
+Som en \textbf{Contributor} bør jeg kunne gennemse tilgængelige opgaver fra \textbf{Requesters} og acceptere dem, der er relevante for mig.
+
+\paragraph{US-09a}
+Som \textbf{Organization} skal jeg kunne vælge  \textbf{contributor(s)} blandt de modtagne tilbud, så opgaven kan tildeles.
+
+\paragraph{US-09b}
+Som \textbf{Requester} bør jeg kunne vælge  \textbf{contributor(s)} blandt de modtagne tilbud, så opgaven kan tildeles.
+
+\subsubsection*{Epic 3 -- Belønning, betaling \& whatever}
+% Reward partner - Oprettelse af "Rewards"
+\paragraph{US-10}
+Som en \textbf{Reward Partner} skal jeg kunne oprette rewards, så jeg kan tiltrække platformens \textbf{Users} og skabe eksponering for min forretning. (Acceptkriterie: rewards skal kunne prissættes og indløses via Karma Koins).
+
+\paragraph{US-11a}
+Som en \textbf{Contributor} skal jeg kunne belønnes med Karma Koins for en udført opgave, så min indsats for en \textbf{Organization} anerkendes digitalt.
+
+\paragraph{US-11b}
+Som en \textbf{Contributor} bør jeg kunne belønnes med rigtige penge (\$), så jeg kan modtage likvid betaling for opgaver udført for \textbf{Requesters}.
+
+\paragraph{US-12}
+Som en \textbf{Organization} skal jeg kunne overføre Karma Koins til en \textbf{Contributor} for en udført opgave, så jeg kan skabe incitament for frivillig deltagelse uden at skulle benytte likvide midler.
+
+\paragraph{US-13}
+Som en \textbf{Requestor} bør jeg kunne betale en \textbf{Contributor} for en udført opgave, ved at markere når opgaven er udført, så jeg nemt og sikkert kan kompensere den Contributor, der har hjulpet mig.
+
+\paragraph{US-14}
+Som \textbf{Contributor} skal jeg kunne gennemse tilgængelige belønninger, så jeg kan beslutte, hvordan jeg vil bruge mine Karma Koin.
+
+\paragraph{US-15}
+Som en \textbf{Contributor} skal jeg kunne indløse mine Karma Koins hos en \textbf{Reward Partner}, så jeg kan omsætte min optjente digitale valuta til fysiske varer eller tjenester.
+
+\subsubsection{Epic 4 -- Ratings}
+\paragraph{US-16}
+Som \textbf{User} kan jeg anmelde en anden \textbf{User} efter en fuldført opgave, så fremtidige \textbf{Users} kan vurdere vedkommendes omdømme. 
+
+\paragraph{US-17}
+Som \textbf{User} kan jeg se en anden \textbf{Users} omdømme, så jeg kan vurdere, om jeg har tillid til vedkommende.
+
+\subsection*{Ikke-funktionelle krav}
+\begin{itemize}
+    \item \textbf{Functionality}
+    \begin{itemize}
+        \item \textbf{IFK1.1: Adgangskodebeskyttelse}: \newline
+        Adgangskoder \textbf{skal} lagres sikkert vha. HMAC SHA256 eller sikrere hashingalgoritme.
+
+        \item \textbf{IFK1.2: Sessionshåndtering}: \newline
+        Systemet \textbf{skal} anvende sikker sessionshåndtering vha. JWT, der udløber efter 60 minutters inaktivitet.
+
+        \item \textbf{IFK1.3: SQL Injection}: \newline
+        Det \textbf{skal ikke} være muligt at lave SQL Injections direkte til vores server. Dette \textbf{skal} sikres vha. Github-Advanced-Security.
+    \end{itemize}
+    
+    \item \textbf{Usability}
+    \begin{itemize}
+        \item \textbf{IFK2.1: Intuitivt Design}: \newline
+        En ny bruger \textbf{bør} intuitivt kunne navigere og anvende siden uden nogen form for introduktion.
+
+        \item \textbf{IFK2.2: Login Pop-Up}: \newline
+        Login meddelelser \textbf{kunne} være implementeret, som popups.
+
+        \item \textbf{IFK2.3: Sprog}: \newline
+        Platformen \textbf{skal ikke} understøtte flere sprog eller automatisk oversættelse af indhold.
+
+        \item \textbf{IFK2.4: Mobilunderstøttelse}: \newline
+        Systemet \textbf{bør} understøtte mobil-visning.
+    \end{itemize}
+    
+    \item \textbf{Reliability}
+    \begin{itemize}
+        \item \textbf{IFK3.1: Fejltolerance}: \newline
+        Systemet \textbf{skal} kunne håndtere fejl uden at crashe. Når der sker fejl, vil tilhørende funktionalitet blot være utilgængelig, men resten af systemet \textbf{skal} fungere, som normalt.
+    \end{itemize}
+
+    \item \textbf{Performance}
+    \begin{itemize}
+        \item \textbf{IFK4.1: Sideindlæsningstid}: \newline
+        Systemet \textbf{bør} indlæse sider inden for 5 sekunder under normale netværksforhold.
+
+        \item \textbf{IFK4.2: API Respons}: \newline
+        API-kald fra frontend til backend \textbf{bør} besvares inden for 500ms.
+
+        \item \textbf{IFK4.3: Email Levering}: \newline
+        Mails til bruger \textbf{skal} leveres inden for 2 minutter.
+    \end{itemize}
+
+    \item \textbf{Supportability}
+    \begin{itemize}
+        \item \textbf{IFK5.1: Dokumentation}: \newline
+        Systemet og dets API'er \textbf{bør} være dokumenterede på GitHub.
+
+        \item \textbf{IFK5.2: Testdækning}: \newline
+        Systemet \textbf{bør} have minimum 85\% testdækning for systemets backend.
+
+        \item \textbf{IFK5.3: SOLID}: \newline
+        Systemets kode \textbf{skal} overholde SOLID principperne for nemmere videreudvikling og skalerbarhed.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{FURPS+}
+FURPS+ anvendes i projektet som en overordnet prioritering af de ikke-funktionelle kvalitetsområder
+\textbf{Functionality, Usability, Reliability, Performance} og \textbf{Supportability}.
+Prioriteringen foretages på en skala fra 1--5, hvor 5 angiver den højeste betydning for projektets succes.
+
+%TC:ignore
+\begin{table}[H]
+    \centering
+    \vspace{1em}
+    \small
+    \setlength{\arrayrulewidth}{1pt}
+    \arrayrulecolor{black}
+    \caption{FURPS+ prioritering for Echo}
+    \begin{tabularx}{\textwidth}{|p{3cm}|c|X|}
+        \hline
+        \rowcolor[HTML]{C0C0C0}
+        \textbf{Faktor} & \textbf{Vigtighed} & \textbf{Begrundelse} \\ \hline
+
+        Functionality & 3 &
+        Funktionalitet har høj prioritet, da Echo består af flere sammenhængende kernefunktioner, herunder bruger- og rollehåndtering, oprettelse og udførelse af opgaver, betalinger, Karma Koins, belønninger og ratings. Disse funktioner danner grundlaget for platformens værdiskabelse og skal fungere korrekt på tværs af de forskellige aktørtyper. Særligt adgangskontrol og korrekt håndtering af transaktioner er nødvendige for at understøtte platformens tillids- og belønningsmekanismer. \\ \hline
+
+        \rowcolor{gray!20}
+        Usability & 5 &
+        Brugervenlighed har højeste prioritet, da Echo henvender sig til en bred målgruppe bestående af både private brugere, organisationer og virksomheder med varierende tekniske kompetencer. Platformens centrale arbejdsgange, såsom oprettelse, søgning og udførelse af opgaver samt indløsning af belønninger, skal derfor være intuitive og lette at forstå. En høj grad af brugervenlighed reducerer adgangsbarrieren til platformen og understøtter brugerengagement og adoption. \\ \hline
+
+        Reliability & 4 &
+        Pålidelighed har høj prioritet, da Echo håndterer brugerdata, betalinger, Karma Koins og andre transaktioner, hvor fejl kan have direkte konsekvenser for brugernes tillid til platformen. Systemet skal blandt andet sikre, at opgaver ikke fejlagtigt registreres som gennemført, at belønninger ikke uddeles eller indløses flere gange, og at økonomiske og pointbaserede transaktioner behandles konsistent og sporbar. Fejl i enkelte dele af systemet bør desuden så vidt muligt kunne isoleres uden at gøre hele platformen utilgængelig. \\ \hline
+
+        \rowcolor{gray!20}
+        Performance & 1 &
+        Performance prioriteres moderat i projektets MVP-fase. Platformen skal opleves som responsiv ved almindelige brugerhandlinger, såsom navigation, søgning efter opgaver og gennemførelse af transaktioner, men projektet forventes ikke indledningsvist at skulle håndtere trafik på produktionsskala.  Arkitekturen bør dog ikke forhindre senere skalering. \\ \hline
+
+        Supportability & 2 &
+        Supportability prioriteres relativt højt, da Echo forventes at kunne videreudvikles med nye aktørtyper, aktiviteter, belønningsformer og integrationer. Systemets arkitektur og kodebase bør derfor være modulær, veldokumenteret og testbar, så ændringer kan foretages uden omfattende påvirkning af eksisterende funktionalitet. Principper som SOLID, automatiserede tests, API-dokumentation og en tydelig opdeling af ansvar anvendes for at understøtte vedligeholdelse og fremtidig udvidelse af platformen. \\ \hline
+    \end{tabularx}
+    \label{tab:furps}
+\end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \begin{tabularx}{\textwidth}{|l|c|X|}
+%         \hline
+%         \rowcolor{gray!50}
+%         \textbf{Faktor} & \textbf{Prioritering} & \textbf{Beskrivelse} \\
+%         \hline
+%         \textbf{Functionality} & 1 & Some beskrivelse \\
+%         \hline
+%         \rowcolor{gray!20}
+%         \textbf{Usability} & 2 & Some beskrivelse \\
+%         \hline
+%         \textbf{Reliability} & 4 & Some beskrivelse \\
+%         \hline
+%         \rowcolor{gray!20}
+%         \textbf{Performance} & 3 & Some beskrivelse \\
+%         \hline
+%         \textbf{Supportability} & 4 & Some beskrivelse \\
+%         \hline
+%     \end{tabularx}
+%     \caption{FURPS+ prioriteringstabel}
+%     \label{tab:furps}
+% \end{table}
+
+\subsection*{MosCoW tabel}
+Forneden er et eksempel. Skal rettes til som vi inddeler resten
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|X|X|}
+        \hline
+        \rowcolor{gray!50}
+        \centering\textbf{Must} &
+        \centering\textbf{Should} &
+        \centering\textbf{Could} &
+        \centering\arraybackslash\textbf{Won't} \\
+        \hline
+
+        \textcolor{blue}{US-01} \newline
+        \textcolor{blue}{US-03} \newline
+        \textcolor{blue}{US-04} \newline
+        \textcolor{red}{US-05} \newline
+        \textcolor{red}{US-06} \newline
+        \textcolor{red}{US-08a} \newline
+        \textcolor{red}{US-09a} \newline
+        \textcolor{green!60!black}{US-10} \newline
+        \textcolor{green!60!black}{US-11a} \newline
+        \textcolor{green!60!black}{US-13} \newline
+        \textcolor{green!60!black}{US-14} \newline
+        \textcolor{green!60!black}{US-15} \newline
+        \newline
+        IFK1.1 \newline
+        IFK1.2 \newline
+        IFK3.1 \newline
+        IFK4.3 \newline
+        IFK5.3 
+        &
+        \textcolor{red}{US-07} \newline
+        \textcolor{red}{US-08b} \newline
+        \textcolor{red}{US-09b} \newline
+        \textcolor{green!60!black}{US-11b} \newline
+        \textcolor{green!60!black}{US-12} \newline
+        \newline
+        IFK2.1 \newline
+        IFK2.4 \newline
+        IFK4.1 \newline
+        IFK4.2 \newline
+        IFK5.1 \newline
+        IFK5.2 
+        &
+        \textcolor{blue}{US-02} \newline
+        \textcolor{violet}{US-16} \newline
+        \textcolor{violet}{US-17} \newline
+        \newline
+        IFK2.2 
+        &
+        IFK1.3 \newline
+        IFK2.3 
+        \\
+
+        \hline
+    \end{tabularx}
+    \caption{MoSCoW-prioritering af user stories}
+    \label{tab:moscow}
+\end{table}
+
+\end{document}

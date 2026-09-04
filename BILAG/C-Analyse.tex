@@ -1,0 +1,127 @@
+\documentclass[../main.tex]{subfiles}\begin{document}
+\section{Analyse}
+
+% Teknisk
+% - Microservice vs monorepo (system arkitektur)
+% - Deployment metode
+% - Backend
+% - Database
+% - Frontend 
+% - UI/UX
+
+% Risiko
+\subsection{Risikoanalyse}
+
+For at sikre projektets fremdrift udføres en risikoanalyse, der kortlægger de mest kritiske forhindringer. Målet er at etablere klare strategier for risikohåndtering, hvilket kan indebære alt fra direkte problemløsning til en justering af projektets samlede omfang.\newline
+
+Analysen systematiseres i en risikomatrix, hvor de enkelte risici tildeles en "risk score". Denne vurdering er resultatet af en direkte afvejning mellem sandsynligheden for, at udfordringen opstår, og konsekvensens alvor, såfremt risikoen realiseres
+%TC:ignore
+\begin{table}[H]
+    \caption{Risiko matrix}
+    \label{tab:risikomatrirex}
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    
+    \hline
+    & \multicolumn{5}{c|}{\textbf{Impact}} \\ \cline{2-6}
+    \textbf{Likelihood} & \textbf{Negligible} & \textbf{Minor} & \textbf{Moderate} & \textbf{Significant} & \textbf{Severe} \\ \hline
+    \textbf{Very likely}  & \cellcolor{green!50}Low Med & \cellcolor{yellow!30}Medium & \cellcolor{orange!50}Med Hi & \cellcolor{red!60}High & \cellcolor{red!60}High \\ \hline
+    \textbf{Likely}       & \cellcolor{green!30}Low & \cellcolor{green!50}Low Med & \cellcolor{yellow!30}Medium & \cellcolor{orange!50}Med Hi & \cellcolor{red!60}High \\ \hline
+    \textbf{Possible}     & \cellcolor{green!30}Low & \cellcolor{green!50}Low Med & \cellcolor{yellow!30}Medium & \cellcolor{orange!50}Med Hi & \cellcolor{orange!50}Med Hi \\ \hline
+    \textbf{Unlikely}     & \cellcolor{green!30}Low & \cellcolor{green!50}Low Med & \cellcolor{yellow!30}Medium & \cellcolor{yellow!30}Medium & \cellcolor{orange!50}Med Hi \\ \hline
+    \textbf{Very Unlikely}& \cellcolor{green!30}Low & \cellcolor{green!30}Low & \cellcolor{green!50}Low Med & \cellcolor{yellow!30}Medium & \cellcolor{yellow!30}Medium \\ \hline
+    
+    \end{tabular}
+\end{table}
+%TC:endignore
+\newpage
+\section*{Processmæssige forhold}
+%TC:ignore
+\begin{longtable}{| P{3.5cm} | P{2cm} | P{2cm} | P{2.5cm} | P{3cm} |}
+    \caption{Risiko tabel - Processmæssige forhold} \\
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Risk Rating} & \textbf{Response} \\
+    \hline
+    \endfirsthead % Dette markerer slutningen af den første header
+
+    \multicolumn{5}{c}%
+    {{\bfseries Tabel \thetable{} -- fortsat fra forrige side}} \\
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Risk Rating} & \textbf{Response} \\
+    \hline
+    \endhead % Dette markerer slutningen af headeren for de efterfølgende sider
+
+    \hline \multicolumn{5}{|r|}{{Fortsat på næste side}} \\ \hline
+    \endfoot % Dette markerer slutningen af foden for de fleste sider
+
+    \hline
+    \endlastfoot % Dette markerer slutningen af foden for den sidste side
+
+    Risiko 1: Frafald fra gruppen & Unlikely & Significant & \cellcolor{yellow!30}Medium & Gruppen holder løbende standup møder for at vidensdele på tværs af undergrupper. \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 2: Samarbejdsudfordringer & Possible & Moderate & \cellcolor{yellow!30}Medium & Der er blevet udvalgt en HR person, hvis formål er at løse interpersonelle konflikter. \\
+    \hline
+    Risiko 3: For ambitiøse mål & Possible & Moderate & \cellcolor{yellow!30}Medium & Gruppen justerer mål, så projektet kan færdiggøres i tide på tilfredsstillende vis. \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 4: Manglende kongruens i projektets mål blandt gruppens medlemmer & Possible & Moderate & \cellcolor{yellow!30}Medium & Gruppen holder møde om, hvad projektet skal opnå, og på denne måde får vi genafstemt hvilke mål vi vil opnå. \\
+    \hline
+\end{longtable}
+%TC:endignore
+\newpage
+\section*{Teknologiske forhold}
+%TC:ignore
+
+\begin{longtable}{| P{3.5cm} | P{2cm} | P{2cm} | P{2.5cm} | P{3cm} |}
+    \caption{Risiko tabel - teknologiske forhold} \\
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Risk Rating} & \textbf{Response} \\
+    \hline
+    \endfirsthead % Dette markerer slutningen af den første header
+
+    \multicolumn{5}{c}%
+    {{\bfseries Tabel \thetable{} -- fortsat fra forrige side}} \\
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Risk Rating} & \textbf{Response} \\
+    \hline
+    \endhead % Dette markerer slutningen af headeren for de efterfølgende sider
+
+    \hline \multicolumn{5}{|r|}{{Fortsat på næste side}} \\ \hline
+    \endfoot % Dette markerer slutningen af foden for de fleste sider
+
+    \hline
+    \endlastfoot % Dette markerer slutningen af foden for den sidste side
+
+    Risiko 1: Kommunikations problemer mellem Front-end og back-end & Unlikely & Moderate & \cellcolor{yellow!30}Medium & Gruppen sætter sig ned og der bug fixes, så problemet udredes \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 2: Lang responstid & Possible & Minor & \cellcolor{green!50}Low Medium & Gruppen finder, hvad der tilføjer responstid til hjemmesiden og prøver på at fikse det \\
+    \hline
+    Risiko 3: Hjemmesiden kan ikke sende mails til bruger & Possible & Negligible & \cellcolor{green!30}Low & Email-systemet tjekkes eller ændres til en løsning er fundet \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 4: Manglende funktioner i software & Unlikely & Significant & \cellcolor{yellow!30}Medium & Enten bliver målene genafstemt, eller der skiftes til et andet framework der kan det vi ønsker \\
+    \hline
+    Risiko 5: Udfordringer i integrationen mellem webapp og database & Possible & Moderate & \cellcolor{yellow!30}Medium & Review hvad vi har lært i semestret \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 6: Frontend stemmer ikke overens med gruppens vision & Possible & Minor & \cellcolor{green!50}Low Medium & Der tweakes indtil frontend kan accepteres \\
+    \hline
+    Risiko 7: Udfordringer med brugerhåndtering & Possible & moderate & \cellcolor{yellow!30}Medium & Brugerhåndtering håndteres af et eksisterende bibliotek \\
+    \hline
+\end{longtable}
+%TC:endignore
+\newpage
+
+\section*{Risici Konklusion}
+
+Da der ikke er nogen risici, der overstiger risikovurderingen Med High / High, vil gruppen fortsætte projektarbejdet som tidligere udtænkt. Der er dog faktorer, hvor gruppen skal være særlig opmærksom for at danne det bedste grundlag for et velfungerende semesterprojekt. Dette er hovedsageligt i udvælgelsen af den teknologi, der anvendes til at fuldføre projektet.
+
+
+\end{document}

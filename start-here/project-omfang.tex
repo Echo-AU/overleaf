@@ -1,0 +1,70 @@
+\documentclass[../main.tex]{subfiles}\begin{document}
+\section{Projektomfang for Echo}
+
+\subsection*{Bruger og konto}
+\begin{itemize}
+    \item Oprettelse af bruger og login
+    \item Verificering af nyoprettede brugere
+    \item Autentifikation og sikker sessionshåndtering
+    \item Profil med oplysninger om, hvilke opgavetyper brugeren kan hjælpe med
+    \item Profilvalidering som tillidsskabende mekanisme
+\end{itemize}
+
+\subsection*{Opgaver og matchning}
+\begin{itemize}
+    \item Oprettelse af opgaver og ydelser
+    \item Søgefunktion til at finde opgaver
+    \item Filtrering og kategorisering af opgavetyper
+\end{itemize}
+
+\subsection*{Aftaleindgåelse}
+\begin{itemize}
+    \item Booking eller aftaleindgåelse mellem to brugere
+    \item Statusflow for en aftale: oprettet, accepteret, udført, afsluttet
+    \item Afslutning af opgave som trigger for kreditoverførsel og rating
+\end{itemize}
+
+\subsection*{Kreditmodul}
+\begin{itemize}
+    \item Optjening af credits ved at hjælpe andre brugere
+    \item Optjening af credits via verificerede velgørenhedsaktiviteter
+    \item Forbrug af credits til at modtage hjælp
+    \item Balancevisning for brugeren
+    \item Transaktionshistorik med sporbarhed
+    \item Regler for fairness og balance mellem optjening og forbrug
+    \item Transaktionssikkerhed, så credits ikke kan optjenes eller bruges inkonsistent
+    \item Misbrugsforebyggelse, f.eks.\ selvtransaktioner og cirkulære overførsler
+\end{itemize}
+
+\subsection*{Rating og tillid}
+\begin{itemize}
+    \item Bedømmelse af hinanden efter afsluttede opgaver
+    \item Visning af rating på profil
+    \item Rating kun mulig ved gennemført aftale
+\end{itemize}
+
+\subsection*{Velgørenhedsaktiviteter}
+\begin{itemize}
+    \item Administration og oprettelse af velgørenhedsaktiviteter
+    \item Verificering af deltagelse
+    \item Tildeling af credits for verificeret deltagelse
+\end{itemize}
+
+\subsection*{Tekniske tværgående emner}
+\begin{itemize}
+    \item Klient-server-arkitektur med adskilt frontend og backend
+    \item API-design og backend-arkitektur
+    \item Domænemodellering af brugere, opgaver, bookings, ratings og kredittransaktioner
+    \item Databasedesign med fokus på konsistens og sporbarhed
+    \item Forretningslogik placeret i backend
+    \item Sikkerhed og adgangskontrol
+\end{itemize}
+
+\subsection*{Proces og afgrænsning}
+\begin{itemize}
+    \item Funktionel prototype frem for produktionsklar platform
+    \item Agil og iterativ udvikling med tydelig prioritering, f.eks.\ MoSCoW
+    \item Demonstration af de vigtigste flows i systemet
+\end{itemize}
+
+\end{document}

@@ -1,3 +1,148 @@
 \documentclass[../main.tex]{subfiles}\begin{document}
-\section{Afgrænsninger}
+\section{Scope \& limitations}
+Kravene til systemet er nu blevet bestemt, og de ikke-funktionelle krav er blevet kategoriseret i prioritetsniveau ift. MoSCoW.
+I dette afsnit bliver krav for både funktionelle krav og ikke-funktionelle krav indsat i tabeller for at visualisere fordelingen af de forskellige kravniveauer.
+
+%######################################################################################
+%########################## funktionelleKravMoscow ####################################
+%####################################################################################
+\subsection{MoSCoW - functional requirements}
+
+De funktionelle krav og deraf bestemte User Stories er blevet vurderet
+og prioriteret ift. MoSCoW. Denne vurdering er baseret på et estimat af, 
+om manglen på et kravs funktionalitet vil forhindre systemets MVP i at fungere som helhed.
+%TC:ignore
+{\footnotesize
+\begin{longtable}{|>
+{\raggedright\arraybackslash}p{6.2cm}|>{\raggedright\arraybackslash}p{4.7cm}|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{1.6cm}|}
+    \caption{MoSCoW funktionelle krav} 
+    \label{tab:moscow_krav} \\
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Must} & \textbf{Should} & \textbf{Could} \\ \hline
+
+    % Must column
+    - M-US-1.1: Registrer som bruger \newline
+    - M-US-1.2: Login som bruger \newline
+    - M-US-2.1: Se og navigér mellem partier og politikere \newline
+    - M-US-2.2: Indhold på parti- og politikersider \newline
+    - M-US-3.1: Administrer indhold \newline
+    - M-US-4.1: Abonnering \newline
+    - M-US-4.2: Feed \newline
+    - M-US-5.1: Politisk Kalender \newline
+    - M-US-6.1: Læringsforløb
+    &
+    % Should column
+    - S-US-1.3: Rediger brugeroplysninger \newline
+    - S-US-2.3: Søg efter politiker eller parti \newline
+    - S-US-3.2: Administrer brugere \newline
+    - S-US-6.2: Flashcards
+    &
+    % Could column
+    - C-US-3.3: Administrer læringsområde \newline
+    - C-US-5.2: Interesse i begivenheder \newline
+    - C-US.6.3: “Dagens politiker" \newline
+    - C-US-6.4: Polidles
+    \\ \hline
+\end{longtable}
+}
+%TC:endignore
+
+
+%######################################################################################
+%################################## ikkefunkMoscow ####################################
+%########################################½#############################################
+
+
+\subsection{MoSCoW - non-functional requirements} 
+
+Der er i denne tabel opsat den tidligere besluttet MoSCoW-inddeling af de ikke-funktionelle krav.
+% Adjusted column widths to accommodate titles. You might need to fine-tune these.
+%TC:ignore
+{\footnotesize
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{4cm}|}
+    \caption{Oversigt over MoSCoW ikke-funktionelle krav med titler}
+    \label{tab:moscow_ifk_titler} \\
+    \hline
+    \rowcolor{gray! 50}
+    \textbf{Must} & \textbf{Should} & \textbf{Could} & \textbf{Won't}  \\ \hline
+    \endfirsthead % Marks the end of the header for the first page
+    
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Must} & \textbf{Should} & \textbf{Could} & \textbf{Won't}  \\ \hline
+    \endhead % Marks the end of the header for subsequent pages
+
+    \hline \multicolumn{4}{|r|}{Fortsættes på næste side} \\ \hline
+    \endfoot % Footer for all pages except the last
+
+    \endlastfoot % Footer for the last page
+
+    % Must column
+        - IFK1.1: Adgangskodebeskyttelse \newline
+        - IFK1.2: Sessionshåndtering \newline
+        - IFK1.3: SQL Injection \newline
+        - IFK3.1: Fejltolerance \newline
+        - IFK4.3: Email Levering \newline
+        - IFK5.3: SOLID
+    &
+
+    % Should column
+        - IFK2.1: Intuitivt Design \newline
+        - IFK4.1: Sideindlæsningstid \newline
+        - IFK4.2: API Respons \newline
+        - IFK5.1: Dokumentation \newline
+        - IFK5.2: Testdækning
+
+    &
+
+    % Could column
+       - IFK2.2: Login Pop-Up
+    &
+
+    % Won't column
+        - IFK2.3: Sprog \newline
+        - IFK2.4: Mobilunderstøttelse
+    \\ \hline
+\end{longtable}
+}
+%TC:endignore
+
+%######################################################################################
+%######################################### furps ######################################
+%########################################½#############################################
+
+\newpage
+
+\subsection{FURPS+}
+
+FURPS+ er i dette projekt også anvendt som en overordnet prioritering af hovedområderne \textbf{functionality, usability, reliability, performance
+og supportability} for de funktionelle krav. Dette er gjort på baggrund af MoSCoW-prioriteringerne for projektet. 
+%TC:ignore
+\begin{table}[H]
+    \centering
+    \vspace{1em}
+    \small 
+    \setlength{\arrayrulewidth}{1pt}
+    \arrayrulecolor{black}
+    \caption{FURPS+ for Borgertinget}
+    \begin{tabularx}{\textwidth}{|p{3cm}|c|X|}
+        \hline
+        \rowcolor[HTML]{C0C0C0} 
+        \textbf{Attributter} & \textbf{Vigtighed} & \textbf{Begrundelse} \\ \hline
+        
+        Functionality & 4 & Funktionalitet er en af de højeste prioriteter for Borgertinget, da platformen skal kunne levere en bred vifte af funktioner såsom brugerhåndtering, politik- og partisider, polls og feed-interaktion. For at systemet kan opfylde sine formål om brugerengagement og politisk oplysning, er det essentielt, at alle kernefunktioner fungerer korrekt og sikkert. Der skal derfor være basale sikkerhedsforanstaltninger for at beskytte brugerdata og forhindre manipulation af afstemninger eller data vha. f.eks. SQL Injections. \\ \hline
+        
+        \rowcolor{gray!30}
+        Usability & 5 & Brugervenlighed er altafgørende for Borgertinget, da platformen henvender sig til en bred brugergruppe inklusiv ikke-tekniske brugere. Systemet skal være intuitivt og nemt at navigere i, så brugere let kan finde og forstå politiske informationer samt deltage i meningsmålinger. En høj brugervenlighed sikrer et større engagement og brugerfastholdelse. Det er ikke normal procedure at have fokus på UI og UX i MVP fasen, men eftersom teamet er yderst interreseret i at levere et godt produkt vil de ekstra timer lægges for at sikre en acceptabel brugeroplevelse. \\ \hline
+        
+        Reliability & 4 & Pålidelighed er afgørende, da Borgertinget skal kunne levere konsistente og korrekte data om politikere, partier og meningsmålinger. Det er vigtigt, at platformen fungerer stabilt uden nedetid, især under politiske begivenheder eller meningsmålinger, hvor mange brugere kan være aktive samtidigt. Fejl eller tab af data vil påvirke brugernes tillid til platformen. \\ \hline
+        
+        \rowcolor{gray!30}
+        Performance & 3 & Ydeevne prioriteres moderat, da platformen skal kunne håndtere større mængder data fra sociale medier og brugernes interaktioner uden væsentlige forsinkelser. Platformen skal være responsiv og effektiv, men der stilles ikke ekstreme krav til hastighed, da det vigtigste er stabilitet og kontinuerlig adgang til information. \\ \hline
+        
+        Supportability & 2 & Supportabilitet i form af dokumentation og vedligeholdelse vurderes som mindre kritisk i MVP-fasen, men vil blive vigtigere ved videreudvikling i MLP og MMP udviklingen. Selvfølgelig vil projektet sigte efter korrekt anvendelse af principper som SOLID og DRY. \\ \hline
+    \end{tabularx}
+\end{table}
+
 \end{document}
