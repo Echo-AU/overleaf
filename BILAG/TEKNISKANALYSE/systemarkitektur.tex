@@ -10,46 +10,144 @@ Hvad har \textbf{jeres produkt} brug for?\\
 \begin{itemize}
     \item Monolith
     \item Microservices
-    \item 3rd
+    \item Modular monolith
 \end{itemize}
 
-% Specifikke kriterier
-Definer kriterier for teknologien
+% Specifikke punkter
+For at analyserer de forskellige arkitektuerer er der opsat nogle specifikke punkter som er relevante for projektet, hvor analysen vil fokuserer.\\
 
-\subsection*{Analyse - 1st}
-Diskuter teknologiernes faktiske styrker og svagheder.
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{\textwidth}{|X|c|X|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Kriterie} & \textbf{Vægt} & \textbf{Relevans for Echo} \\
+        \hline
+        Egnethed til projektet & 15\% & Arkitekturen skal passe til platformens kernefunktioner: brugere, opgaver, belønninger, betalinger og ratings. \\
+        \hline
+        Udviklingshastighed & 10\% & Gruppen skal kunne udvikle og iterere hurtigt inden for projektets tidsramme. \\
+        \hline
+        Maintainability & 10\% & Systemet skal kunne videreudvikles uden at ændringer i et område skaber unødige fejl i andre dele af platformen. \\
+        \hline
+        Performance & 5\% & Systemet bør kunne indlæse sider inden for 5 sekunder og besvare API-kald inden for 500 ms under normale forhold. \\
+        \hline
+        Kompetencer i gruppen & 10\% & Arkitekturen skal være realistisk at implementere med gruppens nuværende tekniske erfaring. \\
+        \hline
+        Ecosystem/tooling & 5\% & Der bør være gode værktøjer til udvikling, test, dokumentation, deployment og sikkerhedsscanning. \\
+        \hline
+        Fremtidig skalerbarhed & 5\% & Platformen bør kunne udvides, hvis antallet af brugere, opgaver, betalinger eller rewards vokser. \\
+        \hline
+        Sikkerhed, roller og adgangskontrol & 10\% & Echo har flere brugertyper, og arkitekturen skal understøtte tydelig og sikker håndhævelse af rettigheder. \\
+        \hline
+        Transaktionssikkerhed og datakonsistens & 10\% & Karma Koins, saldo, betalinger og reward-indløsning kræver, at data forbliver korrekte og konsistente. \\
+        \hline
+        Domæneopdeling og kompleksitet i workflows & 8\% & Projektet består af flere domæner, blandt andet konto, opgaver, belønninger, betaling og ratings, som bør kunne adskilles logisk. \\
+        \hline
+        Integrationer og asynkrone processer & 6\% & Email, betalinger og eventuelle eksterne services kan kræve baggrundsprocesser og asynkron kommunikation. \\
+        \hline
+        Fejlisolering i kritiske funktioner & 6\% & Hvis eksempelvis email, rewards eller ratings fejler, bør resten af platformen fortsat kunne fungere. \\
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Total} & \textbf{100\%} & \\
+        \hline
+    \end{tabularx}
+    \caption{Vurderingskriterier for valg af systemarkitektur}
+    \label{tab:systemarkitektur-kriterier}
+\end{table}
 
-\subsection*{Analyse - 2nd}
-Diskuter teknologiernes faktiske styrker og svagheder.
+\subsection*{Analyse af monolith arkitektur}
+En monolith arkitektur vil samle Echos backend i én samlet applikation, hvor funktioner som konto, roller, opgaver, betaling, Karma Koins, rewards og ratings ligger i samme kodebase og typisk arbejder mod samme database. Det gør arkitekturen forholdsvis enkel at udvikle, teste og deploye, hvilket passer godt til et studieprojekt med begrænset tid og et mindre udviklingsteam. Gruppen skal ikke bruge mange ressourcer på servicekommunikation, distribueret deployment, netværksfejl eller kompleks overvågning, og det kan derfor give en høj udviklingshastighed i projektets første version.
 
-\subsection*{Analyse - 3rd}
-Diskuter teknologiernes faktiske styrker og svagheder.
+Monolith arkitekturen er også stærk i forhold til datakonsistens. Flere af Echos centrale user stories afhænger af, at opgavestatus, saldo, transaktionshistorik og belønninger stemmer overens. Når en Contributor eksempelvis belønnes med Karma Koins efter en udført opgave, eller når en reward indløses hos en Reward Partner, kan ændringerne håndteres i samme transaktion. Det reducerer risikoen for fejl som dobbeltindløsning, forkert saldo eller en opgave der markeres udført uden at belønningen registreres korrekt.
+
+Ulempen er, at en almindelig monolith hurtigt kan blive svær at vedligeholde, hvis domænerne ikke adskilles tydeligt. Echo består ikke kun af simple CRUD-funktioner, men af flere forbundne workflows: brugere skal have roller og rettigheder, opgaver skal kunne oprettes, accepteres og markeres som udført, betalinger og Karma Koins skal registreres, og ratings skal knyttes til fuldførte opgaver. Hvis disse dele blandes tæt sammen i samme lag uden klare grænser, kan små ændringer få utilsigtede konsekvenser andre steder i systemet. Fejlisolering er også en svaghed, da fejl i én del af applikationen potentielt kan påvirke hele backend, medmindre der aktivt bygges robust fejlhåndtering ind.
+
+Samlet set er en monolith realistisk og effektiv for Echo, især fordi projektet har stærke krav til konsistens og en begrænset udviklingsramme. Den største risiko er ikke performance eller tooling, men at arkitekturen over tid bliver uoverskuelig, hvis gruppen ikke arbejder disciplineret med opdeling, test og ansvar mellem de forskellige domæner.
+
+\subsection*{Analyse af microservices arkitektur}
+En microservices arkitektur vil opdele Echo i flere selvstændige services, eksempelvis en user-service, task-service, payment-service, reward-service og rating-service. Hver service kan have sit eget ansvar, sin egen deployment og eventuelt sin egen database. Det giver en stærk domæneopdeling og kan gøre det lettere at skalere enkelte dele af platformen uafhængigt, hvis systemet på sigt får mange brugere, mange opgaver eller stor aktivitet omkring betalinger og rewards.
+
+Arkitekturen passer godt til fejlisolering og asynkrone processer. Hvis email-levering eller reward-håndtering fejler, kan resten af systemet i princippet fortsætte, så længe services kommunikerer robust gennem API'er, queues eller events. Det understøtter Echos ikke-funktionelle krav om, at fejl i en funktionalitet ikke bør få hele systemet til at crashe. Microservices kan derfor være stærke, hvis Echo udvikler sig til en større platform med mange integrationer, eksterne betalingsudbydere og behov for uafhængig drift af forskellige forretningsområder.
+
+Til gengæld skaber microservices betydelig kompleksitet for et projekt som Echo. Mange af user stories kræver konsistente data på tværs af domæner. Når en opgave markeres som udført, kan det påvirke opgavestatus, Contributorens saldo, Requesterens betaling, Organizationens Karma Koin-overførsel, transaktionshistorik og muligheden for efterfølgende rating. Hvis disse data ligger i forskellige services, bliver det sværere at sikre, at hele workflowet enten gennemføres korrekt eller rulles tilbage. Gruppen vil skulle håndtere distribuerede transaktioner, eventual consistency, servicekontrakter, netværksfejl, logging og deployment af flere services.
+
+Microservices vil derfor sandsynligvis give mere arkitektonisk kapacitet, end projektet har brug for i første version. Fordelene omkring skalerbarhed, fejlisolering og uafhængig udvikling er reelle, men de kommer med en høj pris i udviklingshastighed og teknisk kompleksitet. For Echo vurderes microservices derfor primært som en relevant fremtidig retning, hvis platformen vokser markant, men ikke som den mest hensigtsmæssige startarkitektur for gruppens nuværende projekt.
+
+\subsection*{Analyse af modular monolith arkitektur}
+En modular monolith kombinerer enkelheden fra en monolith med en tydelig intern opdeling af systemet. Echo kan stadig deployes som én samlet applikation og bruge én fælles database, men kodebasen opdeles i moduler med klare ansvarsområder, eksempelvis account, task, payment, reward og rating. Det gør arkitekturen særligt relevant for Echo, fordi projektets user stories naturligt falder i adskilte domæner, samtidig med at flere workflows kræver tæt datakonsistens.
+
+Denne arkitektur understøtter især Echos behov for transaktionssikkerhed. Når en Contributor afslutter en opgave og modtager Karma Koins, kan task- og payment-modulerne arbejde sammen inden for samme applikation og database. Det gør det lettere at sikre korrekt saldo, transaktionshistorik og opgavestatus end i en distribueret microservices-løsning. Samtidig kan adgangskontrol og rollebegrænsninger håndhæves centralt og genbruges på tværs af moduler, hvilket er vigtigt, fordi Contributors, Requesters, Organizations og Reward Partners skal have forskellige rettigheder.
+
+Maintainability er den største fordel sammenlignet med en klassisk monolith. Hvis modulgrænserne overholdes, kan gruppen arbejde med opgaver, rewards, betaling og ratings som separate dele af systemet uden at skulle introducere den driftsmæssige kompleksitet fra microservices. Det passer godt til kravet om SOLID, dokumenterede API'er og høj testdækning, fordi hvert modul kan have egne services, tests og klare interfaces. Arkitekturen giver også en mere realistisk vej til fremtidig skalering, da et modul senere kan udskilles til en separat service, hvis det bliver nødvendigt.
+
+Modular monolith har dog stadig nogle af monolithens begrænsninger. Hele applikationen deployes samlet, og en alvorlig fejl i runtime kan stadig påvirke hele backend. Fejlisoleringen er derfor ikke lige så stærk som i microservices. Det kræver også disciplin fra gruppen at holde modulgrænserne rene; hvis modulerne begynder at kalde direkte ind i hinandens interne logik eller dele databaseadgang ukontrolleret, ender løsningen hurtigt som en almindelig tæt koblet monolith. På trods af dette vurderes modular monolith som den bedste balance for Echo, fordi den matcher projektets domæner, holder udviklingsarbejdet realistisk og samtidig beskytter de kritiske transaktioner.
 
 
 \subsection{Scoring}
-\begin{tabular}{|l|l|l|l|l|}
-    \hline
-    \rowcolor{gray!30}
-    \textbf{Kriterie} & \textbf{Vægt} & \textbf{Monolith} & \textbf{Microservices} & \textbf{Tek 3}\\
-    \hline
-    Projekt fit & 25\% & - & - & - \\
-    \hline
-    Udviklingshastighed & 20\% & - & - & - \\
-    \hline
-    Maintainability & 15\% & - & - & - \\
-    \hline
-    Performance & 10\% & - & - & - \\
-    \hline
-    Ecosystem & 10\% & - & - & - \\
-    \hline
-    Team kompetence & 20\% & - & - & - \\
-    \hline
-    \rowcolor{gray!30}
-    Vægtet scorer & 100\% & - & - & - \\
-    \hline
-\end{tabular}
+Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede score er beregnet ud fra kriteriets vægt.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{|X|c|c|c|c|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Kriterie} & \textbf{Vægt} & \textbf{Monolith} & \textbf{Microservices} & \textbf{Modular monolith} \\
+        \hline
+        Egnethed til projektet & 15\% & 8 & 6 & 10 \\
+        \hline
+        Udviklingshastighed & 10\% & 10 & 4 & 8 \\
+        \hline
+        Maintainability & 10\% & 6 & 8 & 10 \\
+        \hline
+        Performance & 5\% & 8 & 6 & 8 \\
+        \hline
+        Kompetencer i gruppen & 10\% & 10 & 7 & 4 \\
+        \hline
+        Ecosystem/tooling & 5\% & 8 & 6 & 8 \\
+        \hline
+        Fremtidig skalerbarhed & 5\% & 4 & 10 & 8 \\
+        \hline
+        Sikkerhed, roller og adgangskontrol & 10\% & 8 & 6 & 8 \\
+        \hline
+        Transaktionssikkerhed og datakonsistens & 10\% & 10 & 4 & 10 \\
+        \hline
+        Domæneopdeling og kompleksitet i workflows & 8\% & 4 & 10 & 10 \\
+        \hline
+        Integrationer og asynkrone processer & 6\% & 6 & 10 & 8 \\
+        \hline
+        Fejlisolering i kritiske funktioner & 6\% & 4 & 10 & 6 \\
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Vægtet score} & \textbf{100\%} & \textbf{7,52} & \textbf{6,90} & \textbf{8,34} \\
+        \hline
+    \end{tabularx}
+    \caption{Scoring af arkitekturkandidater}
+    \label{tab:systemarkitektur-scoring}
+\end{table}
 
 \subsection*{Beslutning}
+
+\textbf{Version 1: Valg af modular monolith}
+
+På baggrund af den tekniske analyse vurderes modular monolith som det mest hensigtsmæssige valg for Echo som produkt. Arkitekturen passer godt til projektets nuværende størrelse, fordi systemet kan udvikles og deployes som én samlet backend, samtidig med at kodebasen opdeles i tydelige moduler såsom konto, opgaver, betaling, rewards, ratings og notifikationer. Det giver en god balance mellem enkelhed og struktur, da gruppen undgår den ekstra kompleksitet fra microservices, men stadig kan arbejde med klare ansvarsområder internt i systemet.
+
+Valget understøttes især af Echos behov for datakonsistens. Flere centrale user stories afhænger af, at opgavestatus, saldo, transaktionshistorik, Karma Koins og reward-indløsning hænger korrekt sammen. I en modular monolith kan disse workflows håndteres inden for samme applikation og database, hvilket gør det lettere at sikre korrekte transaktioner end i en distribueret arkitektur. Samtidig giver den modulære opdeling bedre maintainability end en klassisk monolith, fordi hvert domæne kan udvikles og testes mere isoleret.
+
+Modular monolith vurderes derfor som det bedste produktmæssige valg, fordi arkitekturen er realistisk at implementere i projektets tidsramme, matcher gruppens kompetencer og stadig giver mulighed for videreudvikling. Hvis Echo senere vokser, kan de mest belastede eller uafhængige moduler potentielt udskilles til separate services. Dermed fungerer modular monolith både som en praktisk MVP-arkitektur og som et solidt fundament for fremtidig skalering.
+
+Det skal dog bemærkes, at modular monolith kan give mindre komplekse C4-diagrammer på container-niveau end en distribueret arkitektur. Da systemet deployes som én samlet backend, vil en del af den arkitektoniske kompleksitet primært skulle vises i komponentdiagrammer og interne modulgrænser frem for i separate services. Valget er derfor stærkt set fra et produkt- og MVP-perspektiv, men det giver ikke nødvendigvis det samme omfang af arkitektoniske problemstillinger til rapportens diagrammer og procesanalyse som en microservice-baseret løsning.
+
+\textbf{Version 2: Valg af microservices}
+
+Selvom den objektive tekniske analyse peger på modular monolith som det stærkeste produktvalg, kan microservices vælges som arkitektur, hvis projektets akademiske formål vægtes højere. Bachelorprojektet handler ikke kun om at bygge den simpleste MVP, men også om at demonstrere en faglig proces, hvor gruppen arbejder med arkitekturvalg, servicegrænser, integrationer, API-kontrakter, deployment, fejlhåndtering og datakonsistens. Microservices giver derfor et mere interessant grundlag for rapporten, fordi arkitekturen tydeliggør flere af de tekniske trade-offs, som ellers ville være skjult i en monolith.
+
+Echo har samtidig nogle naturlige domænegrænser, som gør microservices relevante at undersøge. Konto og identitet, opgaver, betaling og rewards, ratings samt notifikationer kan opdeles i separate services med hver deres ansvar. Det giver mulighed for at analysere, hvordan services kommunikerer, hvordan fejl i en service påvirker resten af systemet, og hvordan data holdes konsistente på tværs af systemet. Særligt workflows som udførsel af opgaver, overførsel af Karma Koins og efterfølgende ratings skaber relevante problemstillinger omkring distribuerede systemer.
+
+Microservices kan desuden styrke rapportens diagramarbejde. På C4 container-niveau kan arkitekturen visualisere frontend, API-lag, user-service, task-service, payment-reward-service, notification-service og deres databaser eller kommunikationskanaler. Det giver mere konkrete diagrammer at analysere, fordi relationerne mellem systemets dele bliver synlige: hvilke services der ejer hvilke data, hvilke kald der er synkrone, hvilke processer der kan være asynkrone, og hvor fejl kan isoleres. På den måde bliver arkitekturen ikke kun et implementeringsvalg, men også et tydeligt grundlag for rapportens tekniske refleksion.
+
+Valget af microservices bør dog beskrives som et bevidst kompromis. For en første MVP er arkitekturen sandsynligvis mere kompleks end nødvendigt, og den vil kræve mere arbejde med drift, kommunikation mellem services og håndtering af inkonsistente data. Til gengæld giver den gruppen et stærkere udgangspunkt for at vise læring, refleksion og teknisk modenhed i rapporten. En realistisk kompromisløsning vil derfor være at implementere en begrænset microservice-inspireret arkitektur med få centrale services, eksempelvis user-service, task-service, payment-reward-service og notification-service, frem for en fuld enterprise-lignende microservice-platform.
 
 \begin{figure}[H]
     \centering
