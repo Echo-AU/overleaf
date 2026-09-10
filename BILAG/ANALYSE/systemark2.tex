@@ -1,0 +1,116 @@
+\documentclass[../C-analyse.tex]{subfiles}\begin{document}
+\section{Systemarkitektur}
+Dette afsnit analyserer mulige systemarkitekturer for Echo og vurderer, hvilken løsning der bedst understøtter projektets funktionelle krav, samt giver det bedste grundlag for teknisk refleksion i rapporten. Analysen sammenligner tre relevante arkitekturkandidater: Monolith, Microservices og Modular Monolith. 
+
+\subsection{Krav}
+Echo er en domænetung platform med flere brugerroller (Contributors, Requesters, Organizations, Reward Partners). Arkitekturen skal understøtte tydelig adgangskontrol og komplekse workflows, hvor handlinger er tæt koblede. Når en opgave eksempelvis markeres som udført, påvirker det betaling, saldo, Karma Koin-overførsler og muligheden for efterfølgende ratings. Dette stiller strenge krav til transaktionssikkerhed og datakonsistens.\newline
+
+Samtidig skal arkitekturen understøtte projektets ikke-funktionelle krav. Koden skal være testbar og bygget på SOLID-principper, og systemet skal besidde en grad af fejltolerance ved integrationer, såsom afsendelse af emails eller eksterne betalinger. Endelig skal arkitekturen være realistisk at implementere og deploye inden for bachelorprojektets tidsramme, uden at den arkitektoniske kompleksitet overskygger udviklingen af kernefunktionaliteten.\newline
+
+% Kriterier
+For at analysere arkitekturerne er de oprindelige krav samlet i syv vægtede kriterier. Kriterier som absolut performance og tooling er udeladt her, da disse i højere grad bestemmes af det valgte kodesprog og framework (se afsnittet om Backend).
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{\textwidth}{|X|c|X|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Kriterie} & \textbf{Vægt} & \textbf{Relevans for Echo} \\
+        \hline
+        Transaktionssikkerhed og datakonsistens & 20\% & Opgaver, saldo, betaling og Karma Koins kræver atomiske operationer, hvor data ikke ender i modstrid med hinanden. \\
+        \hline
+        Domæneopdeling og egnethed & 20\% & Platformens kernefunktioner (brugere, opgaver, rewards, betaling) bør logisk kunne adskilles i koden. \\
+        \hline
+        Maintainability og testbarhed & 15\% & Koden skal struktureres, så ændringer i et domæne ikke forårsager utilsigtede fejl i andre, og logikken skal nemt kunne enhedstestes. \\
+        \hline
+        Udviklingshastighed og kompetencer & 15\% & Arkitekturen skal matche gruppens erfaring og sikre fremdrift uden for meget tid spildt på infrastruktur. \\
+        \hline
+        Fejlisolering og asynkrone processer & 10\% & Fejl i eksempelvis email- eller reward-håndtering bør isoleres, så systemets primære opgave-flow ikke krasher. \\
+        \hline
+        Sikkerhed og adgangskontrol & 10\% & Det skal være gennemskueligt og sikkert at håndhæve rollebaseret autorisation på tværs af platformen. \\
+        \hline
+        Fremtidig skalerbarhed & 10\% & Arkitekturen bør tage højde for uafhængig udvidelse af specifikke forretningsområder, hvis platformen vokser. \\
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Total} & \textbf{100\%} & \\
+        \hline
+    \end{tabularx}
+    \caption{Vurderingskriterier for valg af systemarkitektur}
+    \label{tab:systemarkitektur-kriterier}
+\end{table}
+
+\subsection*{Transaktionssikkerhed og datakonsistens (20\%)}
+I en standard monolith og modular monolith afvikles alle domæner i samme proces, oftest mod en delt relationel database. Dette gør det trivielt at anvende ACID-transaktioner. En overførsel af Karma Koins og et statusskift på en opgave kan gennemføres atomisk via Entity Framework Core. I en microservices-arkitektur distribueres disse handlinger over netværket til separate services. Datakonsistens skal her håndteres via eventual consistency og mønstre som Saga, hvilket introducerer en voldsom mængde kompleksitet og risiko for inkonsistent data ved netværksfejl. \newline
+
+\medskip\noindent\textbf{Score:} Monolith: 10 \quad Microservices: 4 \quad Modular Monolith: 10
+
+\subsection*{Domæneopdeling og egnethed (20\%)}
+Microservices tvinger en ultimativ domæneopdeling frem gennem fysiske grænser. Hvis task-servicen og payment-servicen skal tale sammen, skal det ske via definerede API-kontrakter. Modular monolith tilbyder en stærk logisk opdeling internt i samme kodebase, hvor namespaces og interne interfaces forhindrer tæt kobling. En klassisk monolith starter ofte opdelt, men manglen på håndhævede grænser fører over tid ofte til "spaghetti-kode", hvor domænerne flyder sammen, hvilket gør den uegnet til Echos mængde af tværgående workflows.\newline
+
+\medskip\noindent\textbf{Score:} Monolith: 4 \quad Microservices: 10 \quad Modular Monolith: 9
+
+\subsection*{Maintainability og testbarhed (15\%)}
+Modular monolith giver et fremragende grundlag for maintainability. Hvert domæne har sit eget ansvar og sine egne test-suiter, uden ulemperne ved at skulle spinne infrastruktur op lokalt. Microservices er individuelt nemme at vedligeholde, men systemet som helhed kræver komplekse integrationstests på tværs af netværk, API-gateways og beskedkøer. En almindelig monolith er nem at teste i starten, men mister hurtigt sin maintainability, når projektets størrelse vokser.\newline
+
+\medskip\noindent\textbf{Score:} Monolith: 5 \quad Microservices: 7 \quad Modular Monolith: 9
+
+\subsection*{Udviklingshastighed og kompetencer (15\%)}
+En almindelig monolith giver den absolut hurtigste start. Koden ligger i ét projekt, og deployment kræver kun én CI/CD pipeline og ét hostingmiljø. Modular monolith kræver lidt mere indledende disciplin i arkitekturen, men hastigheden bibeholdes i udviklingsfasen. Microservices er en dræber for udviklingshastigheden i et 4-måneders bachelorprojekt. Tiden vil i høj grad gå med DevOps, Docker Compose-opsætning, routing, netværksfejl og synkronisering mellem services, frem for at bygge forretningsværdi, hvilket også udfordrer gruppens aktuelle kompetencer.\newline
+
+\medskip\noindent\textbf{Score:} Monolith: 10 \quad Microservices: 3 \quad Modular Monolith: 8
+
+\subsection*{Fejlisolering og asynkrone processer (10\%)}
+Her skinner microservices. Hvis reward-servicen eller email-integrationen løber tør for hukommelse og crasher, fortsætter task-servicen. I både monolith og modular monolith deler alle moduler den samme memory-pool og proces. En fatal memory leak i notifikationsmodulet vil trække hele platformen ned. Asynkrone processer kan håndteres i alle tre (via f.eks. background workers), men fysisk fejlisolering opnås kun for alvor i distribuerede systemer.\newline 
+
+\medskip\noindent\textbf{Score:} Monolith: 4 \quad Microservices: 10 \quad Modular Monolith: 5
+
+\subsection*{Sikkerhed og adgangskontrol (10\%)}
+Rollebaseret adgangskontrol (RBAC) er markant nemmere at implementere, når alle domæner deler hukommelse og authentication-lag. I en modular monolith kan brugerens claims læses og verificeres direkte ved et funktionskald. I microservices skal identitet og adgangskontrol distribueres. Hvert API-kald mellem services skal typisk validere tokens og scopes (Zero Trust), hvilket øger både den kodemæssige kompleksitet og risikoen for sikkerhedshuller i intern servicekommunikation.\newline
+
+\medskip\noindent\textbf{Score:} Monolith: 9 \quad Microservices: 6 \quad Modular Monolith: 9
+
+\subsection*{Fremtidig skalerbarhed (10\%)}
+Microservices tillader uafhængig skalering. Hvis belønningssystemet får massiv trafik op til en kampagne, kan kun reward-servicen skaleres horisontalt. Monolith-arkitekturer (både traditionel og modulær) skaleres altid som én samlet klods, hvilket er mindre ressourceeffektivt. Dog har en modular monolith den store fordel over den klassiske monolith, at dens tydelige snitflader gør det relativt nemt at trække et modul ud til en selvstændig microservice, når behovet reelt opstår.\newline
+
+\medskip\noindent\textbf{Score:} Monolith: 5 \quad Microservices: 10 \quad Modular Monolith: 8
+
+
+\subsection{Scoring}
+Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede score er beregnet ud fra kriteriets vægt.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{|X|c|c|c|c|}
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Kriterie} & \textbf{Vægt} & \textbf{Monolith} & \textbf{Microservices} & \textbf{Modular Monolith} \\
+        \hline
+        Transaktionssikkerhed og datakonsistens & 20\% & 10 & 4 & 10 \\
+        \hline
+        Domæneopdeling og egnethed & 20\% & 4 & 10 & 9 \\
+        \hline
+        Maintainability og testbarhed & 15\% & 5 & 7 & 9 \\
+        \hline
+        Udviklingshastighed og kompetencer & 15\% & 10 & 3 & 8 \\
+        \hline
+        Fejlisolering og asynkrone processer & 10\% & 4 & 10 & 5 \\
+        \hline
+        Sikkerhed og adgangskontrol & 10\% & 9 & 6 & 9 \\
+        \hline
+        Fremtidig skalerbarhed & 10\% & 5 & 10 & 8 \\
+        \hline
+        \rowcolor{gray!30}
+        \textbf{Vægtet score} & \textbf{100\%} & \textbf{6,85} & \textbf{6,90} & \textbf{8,55} \\
+        \hline
+    \end{tabularx}
+    \caption{Scoring af arkitekturkandidater}
+    \label{tab:systemarkitektur-scoring}
+\end{table}
+
+\subsection*{Beslutning}
+På baggrund af den tekniske analyse vurderes \textbf{Modular Monolith} som det absolut mest hensigtsmæssige valg for Echo. Arkitekturen leverer en ideel balance for en MVP i et akademisk projekt: Den undgår infrastruktur-overhead fra microservices og tillader atomiske transaktioner på tværs af kritiske workflows (opgaver, belønning og betaling), samtidig med at den fremtvinger en ren domæneopdeling, som den klassiske monolith mangler.\newline
+
+Fra et proces- og rapportperspektiv anerkendes det, at microservices potentielt kunne tilbyde et bredere akademisk diskussionsgrundlag vedrørende distribuerede systemer og netværksfejl. Valget af Modular Monolith er dog truffet ud fra den betragtning, at den reducerede driftskompleksitet frigiver tid til at skrive software af højere kvalitet med bedre testdækning. Arkitekturen giver fortsat rig mulighed for akademisk dybde gennem udarbejdelsen af C4-komponentdiagrammer og definitionen af skarpe API-kontrakter internt mellem modulerne. Dermed fungerer modular monolith både som en driftsikker produktarkitektur og som et solidt teknisk fundament for bachelorprojektet.
+\end{document}
