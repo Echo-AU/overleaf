@@ -8,24 +8,12 @@ En fuld beskrivelse af projektets proces og arbejdsgange findes i Bilag  $\right
 Nedenfor uddybes de primære metoder og værktøjer, der anvendes til udviklingen af systemet.
 
 \subsubsection{Accepttestspecifikation}
-Vi anvender Gherkin-syntaksen til projektets accepttests. Gherkin binder forretningskrav og teknisk implementering sammen gennem sin "Givet-Når-Så" struktur, som gør det muligt at definere testbare scenarier i et naturligt sprog. Metoden sikrer, at vores User Stories afgrænses præcist, og at edge cases identificeres og håndteres tidligt i forløbet.
+Vi anvender Gherkin-syntaksen til projektets accepttests. Gherkin binder forretningskrav og teknisk implementering sammen gennem sin "Givet-Når-Så" struktur, som gør det muligt at definere testbare scenarier i et naturligt sprog. Metoden sikrer, at vores accepttest afgrænses præcist, og at edge cases identificeres og håndteres.
 
 \subsubsection{Arkitektur og design} 
+Softwarearkitekturen dokumenteres og visualiseres med en kombination af C4-modellen og N+1-modellen. Det giver en tydelig adskillelse mellem systemets overordnede struktur og den specifikke implementering.
 
-\paragraph{C4:} C4 modellen blev valgt til at definere SW-arkitekturen for projektet, på baggrund af dens relevans til semestrets øvrige kurser. Det var derfor oplagt at øge kendskabet til denne model og dets relevans til et større software projekt end præsenteret i yderligere kurser. 
-C4-modellen skaber en hierarkisk repræsentation af systemet. Arkitekturen er opdelt i fire niveauer, hvor systemet visualiseres på forskellige abstraktionsniveauer. For at lette forståelsen af disse diagrammer introduceres der diagramnøgler til arkitekturen.
-
-\subparagraph{Keys:} 
-Diagramnøgler viser, hvad de forskellige ikoner, former, farver og pile repræsenterer i C4-diagrammet. De bruges til at gøre diagrammet forståeligt og entydigt for alle, uanset om de kender systemet i forvejen.
-
-\subparagraph{Kontekstdiagram:} 
-Illustrerer relationen mellem systemet, aktører og eksterne systemer.
-
-\subparagraph{Containerdiagram:} 
-Viser de softwarekomponenter, der udgør systemet, samt deres indbyrdes relationer.
-
-\subparagraph{Komponentdiagram:}
-Angiver de interne komponenter i hver container og deres ansvar.
+\paragraph{C4:} Skaber et hierarkisk overblik over systemet på forskellige abstraktionsniveauer: Kontekstdiagrammet (interaktion med omverdenen), Containerdiagrammet (de overordnede softwarekomponenter) og Komponentdiagrammet (ansvarsfordelingen internt). Der anvendes diagramnøgler på alle modeller for at sikre en entydig forståelse.
 
 \subparagraph{Kodediagrammer:}
 Til at diagrammere koden og gå fra arkitektur til design er der anvendt applikationsmodellering fra N+1 modellen. Fremgangsmåden for applikationsmodellerne har været iterativ og har fulgt følgende metode:
@@ -40,8 +28,7 @@ Til at diagrammere koden og gå fra arkitektur til design er der anvendt applika
 Step 3 til 5 gentages indtil produktets funktionalitet gennemfører accepttest og dermed afspejler funktionalitet applikationsmodellen, og det indledende koncept er stadig tydeligt.
 
 \subsubsection{N+1}
-Til beskrivelsen af SW-arkitekturen og implementationen, blev N + 1 modellen valgt. Dette blev gjort på baggrund af en fælles forståelse for N + 1 modellen, samt dens evne til skabe en rød tråd fra arkitektur til produkt.
-N+1 er en metode inden for softwareudvikling, der benyttes til at beskrive og danne et overblik over arkitekturen af et softwaresystem fra flere forskellige perspektiver. I dette projekt anvendes Simon Brown's C4-model til at udpensle SW-arkitekturen, og de dokumenterede N+1 views indeholder derfor kun de aspekter, der relaterer sig til SW-design. Dette er gjort for at undgå gentagelser samt for at sikre en klar opdeling og hensigtsmæssig anvendelse af begge modeller.
+Mens C4 beskriver strukturen, bruges N+1 til at dokumentere udvalgte tekniske perspektiver. For at undgå gentagelser fokuserer vi kun på de views, der direkte relaterer sig til softwaredesignet:
 
 \paragraph{Logical View:} 
 Applikationsmodeller, der beskriver, hvordan SW Systemet er gået fra Arkitekturens koncept til reel implementering.
@@ -63,25 +50,27 @@ Under Security View beskrives systemets sikkerhed. Dette gøres ved hjælp af en
 \paragraph{Development View:} 
 Her opsummeres de informationer, fremtidige udviklere har brug for at vide om opsætningen af udviklingsmiljøet.
 
-\subsubsection{Versionsstyringsværktøj}
-Github blev anvendt frem for Gitlab grundet dets store brugerbase og dets relevans for fremtidig praktik- og arbejdsrelationer.
-Samtidig implementerer Github yderligere QoL features, der har været spændende at arbejde med, bl.a. Github Security.
-Dette har sikret en struktureret
-og klar opdeling af kode. Der er anvendt branches til de forskellige features i projektet. Et link til GitHub projektet ses på dette link: \url{https://github.com/PRJ4SW4/Borgertinget}.
+\subsubsection{Applikationsmodellering (Fra arkitektur til design)} 
+Overgangen fra de overordnede arkitekturtegninger til den reelle kodebase sker iterativt:
 
-\subsubsection{CI/CD}
-CI/CD er blevet implementeret, da dette er industry standard for SW-faget, og et ønske om øget erfaring med CI/CD blandt gruppens medlemmer.
-CI/CD faciliteres gennem GitHub. For backend og frontend er der opsat "GitHub Actions", som sikrer, at dele kompilerer, er fri for linting fejl, og at alle softwaretests består. Derefter er der oprettet et "GitHub Ruleset", som beskytter holdets "Main Branch" og sikrer følgende:
-\begin{itemize}
-    \item Main kræver lineær historik.
-    \item Main branchen kan ikke slettes.
-    \item Der kan ikke laves commits direkte til main. Der kræves et PR, der er reviewet af mindst én anden.
-    \item Alle "GitHub Actions" skal være gennemkørt, inden der kan merges med main.
-    \item Der kan ikke laves "Merge Commits" til main - udelukkende "Squash and Rebase".
-    \item Git's "force" parameter kan ikke anvendes på main.
-    \item Tilkobl GitHub's "CodeQL" skanning på alle PR's til main. Dette skanner efter lækkede environment filer, dårlig code practice, injection attacks og generelle mangler, der kunne være sikkerhedsrisici og advarer om disse ved PR.
-\end{itemize}
+- Der udarbejdes et konceptuelt sekvensdiagram, der skitserer forløbet af en User Story.
+- De nødvendige klasser identificeres og samles i et tomt klassediagram.
+- Funktionaliteten udvikles i koden og verificeres mod accepttestene.
+- Efter endt udvikling opdateres sekvens- og klassediagrammerne med de endelige metoder, så de afspejler den faktiske kode.
 
-Dette sikrer et system, som understøtter konstant integration gennem PR's, der reviewes og scannes for problemer. Testing strategien, der er anvendt, adskiller sig dog fra ren CI/CD. Dette gennemgås i detaljer under testafsnittet.
+\subsubsection{Versionsstyringsværktøj og CI/CD}
+Projektets kodebase administreres i GitHub. For at sikre kodekvaliteten løbende har vi opsat en CI/CD-pipeline via GitHub Actions, som automatisk håndterer byggeprocesser, linting og softwaretests.\newline
+
+For at beskytte projektets main-branch er der opsat følgende GitHub Rulesets:
+
+- Direkte commits til main er blokeret; al kode skal indlejres via Pull Requests (PR).
+
+- En PR kræver mindst ét godkendt review før den kan merges.
+
+- Alle GitHub Actions skal bestå uden fejl, før koden kan merges.
+
+- Historikken holdes lineær ved kun at tillade "Squash and Rebase" (merge commits er deaktiveret).
+
+- GitHub CodeQL kører statisk analyse på alle PR's for at fange sikkerhedsrisici, dårlig kode og lækkede konfigurationsfiler.
 
 \end{document}

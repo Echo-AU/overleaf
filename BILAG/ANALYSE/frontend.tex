@@ -3,24 +3,21 @@
 % UI/UX
 
 \section{Frontend}
-Dette afsnit analyserer valg af frontend-teknologi for Echo. Gruppen har valgt at udvikle løsningen som en web-app frem for en separat mobilapplikation, da en web-app kan bruges på tværs af desktop, tablet og mobil, hvis brugergrænsefladen designes responsivt. Dette passer godt til Echo, hvor Contributors, Requesters, Organizations og Reward Partners skal kunne tilgå platformen fra forskellige enheder uden at gruppen skal vedligeholde flere separate klienter.
+Dette afsnit analyserer valg af frontend-teknologi for Echo. Gruppen har valgt at udvikle løsningen som en web-app frem for en separat mobilapplikation, da en web-app kan bruges på tværs af desktop, tablet og mobil, hvis brugergrænsefladen designes responsivt. Dette passer godt til Echo, hvor Contributors, Requesters, Organizations og Reward Partners skal kunne tilgå platformen fra forskellige enheder uden at gruppen skal vedligeholde flere separate klienter.\\
 
 Analysen fokuserer derfor på tre relevante frontend-frameworks til web-apps: Angular, React og Vue. Teknologierne vurderes ud fra både generelle kriterier og krav, der er særligt relevante for Echo, herunder formularer, rollebaseret navigation, API-integration, responsivt design og testbarhed.
 
 \subsection{Krav}
-Frontend-løsningen skal understøtte Echos centrale brugerflows på en intuitiv måde. Brugere skal kunne oprette konto, logge ind, vedligeholde profil, gennemse opgaver, acceptere eller tildele opgaver, se saldo og transaktionshistorik, indløse rewards og afgive ratings efter fuldførte opgaver. Da systemet har flere brugerroller, skal frontend også kunne håndtere forskellig navigation og visning afhængigt af om brugeren er Contributor, Requester, Organization eller Reward Partner.
+Frontend-løsningen skal understøtte Echos centrale brugerflows på en intuitiv måde. Brugere skal kunne oprette konto, logge ind, vedligeholde profil, gennemse opgaver, acceptere eller tildele opgaver, se saldo og transaktionshistorik, indløse rewards og afgive ratings efter fuldførte opgaver. Da systemet har flere brugerroller, skal frontend også kunne håndtere forskellig navigation og visning afhængigt af om brugeren er Contributor, Requester, Organization eller Reward Partner.\\
 
-De ikke-funktionelle krav stiller også krav til frontend-valget. Siden bør indlæses inden for 5 sekunder under normale netværksforhold, og løsningen bør understøtte mobilvisning. Derudover skal brugergrænsefladen være intuitiv for nye brugere, da platformens værdi afhænger af, at brugerne hurtigt kan forstå, hvordan de finder opgaver, håndterer belønninger og vurderer andre brugeres omdømme.
-
-% Kandidater
-\begin{itemize}
-    \item Angular
-    \item React
-    \item Vue
-\end{itemize}
+De ikke-funktionelle krav stiller også krav til frontend-valget. Siden bør indlæses inden for 5 sekunder under normale netværksforhold, og løsningen bør understøtte mobilvisning. Derudover skal brugergrænsefladen være intuitiv for nye brugere, da platformens værdi afhænger af, at brugerne hurtigt kan forstå, hvordan de finder opgaver, håndterer belønninger og vurderer andre brugeres omdømme.\\
 
 % Kriterier
 For at analysere frontend-teknologierne er der opstillet kriterier, som både dækker generelle teknologivalg og de krav, der er specifikke for Echo.
+
+% Kræver biblatex (eller natbib) og kilder.bib
+
+% Kræver biblatex (eller natbib) og kilder.bib
 
 \begin{table}[H]
     \centering
@@ -30,9 +27,7 @@ For at analysere frontend-teknologierne er der opstillet kriterier, som både d�
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{Relevans for Echo} \\
         \hline
-        Egnethed til projektet & 15\% & Frameworket skal passe til en rollebaseret platform med opgaver, rewards, betaling og ratings. \\
-        \hline
-        Udviklingshastighed & 10\% & Gruppen skal kunne udvikle mange brugerflows hurtigt inden for projektets tidsramme. \\
+        Egnethed til projektet & 20\% & Frameworket skal passe til en rollebaseret platform med opgaver, rewards, betaling og ratings. \\
         \hline
         Maintainability & 10\% & Frontenden skal kunne udvides uden at brugerflows og komponenter bliver svære at overskue. \\
         \hline
@@ -46,13 +41,13 @@ For at analysere frontend-teknologierne er der opstillet kriterier, som både d�
         \hline
         Responsivt webdesign og mobilvisning & 10\% & Echo skal kunne bruges på forskellige skærmstørrelser uden separate apps. \\
         \hline
-        Formularer, routing og rollebaseret navigation & 8\% & Konto, login, oprettelse af opgaver og rewards kræver stærke formular- og routingmuligheder. \\
+        Formularer, routing og rollebaseret navigation & 10\% & Konto, login, oprettelse af opgaver og rewards kræver stærke formular- og routingmuligheder. \\
         \hline
-        State management og API-integration & 8\% & Frontenden skal håndtere loginstatus, brugerroller, opgavelister, saldo og transaktionsdata. \\
+        State management og API-integration & 10\% & Frontenden skal håndtere loginstatus, brugerroller, opgavelister, saldo og transaktionsdata. \\
         \hline
-        Type safety og testbarhed & 7\% & Koden skal være robust og kunne testes, især ved flows med betaling, roller og opgavestatus. \\
+        Type safety og testbarhed & 10\% & Koden skal være robust og kunne testes, især ved flows med betaling, roller og opgavestatus. \\
         \hline
-        Komponentstruktur og design system & 7\% & Genbrugelige komponenter er vigtige for ensartet UI på tværs af opgaver, rewards, profiler og ratings. \\
+        Komponentstruktur og design system & 5\% & Genbrugelige komponenter er vigtige for ensartet UI på tværs af opgaver, rewards, profiler og ratings. \\
         \hline
         \rowcolor{gray!30}
         \textbf{Total} & \textbf{100\%} & \\
@@ -62,26 +57,60 @@ For at analysere frontend-teknologierne er der opstillet kriterier, som både d�
     \label{tab:frontend-kriterier}
 \end{table}
 
-\subsection*{Angular}
-Angular er et komplet frontend-framework med en tydelig struktur, indbygget dependency injection, routing, formularhåndtering og en stærk TypeScript-orienteret udviklingsmodel. Det gør Angular velegnet til Echo, fordi platformen består af mange brugerflows og roller, hvor struktur og ensartethed er vigtigt. Login, opgaveoprettelse, reward-oprettelse og profilredigering kræver mange formularer, og Angulars formularsystem og route guards kan hjælpe med at håndtere både validering og adgangskontrol i frontenden.
+\subsection*{Egnethed til projektet (20\%)}
+De tre kandidater adskiller sig mest i, hvor meget de leverer ud af boksen. Angular er et komplet framework med indbygget routing, formularhåndtering, HTTP-klient og dependency injection~\cite{angular-di}. Det passer til Echo, hvor mange rollebaserede flows skal struktureres ensartet. Vue er et progressivt framework med officielle løsninger til routing og state management i form af Vue Router og Pinia~\cite{vue-router-guards, pinia}, men færre indbyggede værktøjer end Angular, f.eks. til formularvalidering. React er et UI-bibliotek, hvor routing, formularer og datahentning kræver tredjepartsbiblioteker, og React-teamet anbefaler i dag at starte nye projekter med et framework oven på React~\cite{react-cra-sunset}. Både React og Vue kan bruges til Echo, men kræver, at gruppen selv træffer flere arkitekturvalg.
 
-Angulars største fordel for gruppen er, at kompetenceniveauet allerede er relativt højt. Det betyder, at udviklingshastigheden sandsynligvis bliver bedre end ved React og Vue, selvom Angular generelt har en stejlere læringskurve. Angular passer også godt til en rapport, fordi frameworket har en tydelig arkitektur med komponenter, services, dependency injection og moduler, som kan dokumenteres og diskuteres.
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 7 \quad Vue: 7
 
-Ulempen er, at Angular kan virke tungere end React og Vue til en mindre MVP. Der er flere konventioner og mere framework-specifik struktur, som kan føles omfattende i starten. For Echo vurderes dette dog ikke som en afgørende ulempe, fordi projektet netop har mange rollebaserede views og komplekse flows, hvor Angulars struktur kan skabe overblik.
+\subsection*{Maintainability (10\%)}
+Angular er det mest meningsbærende af de tre. Opdelingen i komponenter, services og dependency injection giver en ensartet struktur, som gør koden lettere at overskue på tværs af gruppen. Angular udgiver en ny hovedversion hvert halve år med 18 måneders support, og \texttt{ng update} automatiserer mange migreringer~\cite{angular-releases}. Vue samler template, logik og styling i Single-File Components, hvilket gør den enkelte komponent overskuelig~\cite{vue-sfc}, men giver færre konventioner for strukturen af applikationen som helhed. React giver størst frihed, men netop derfor afhænger vedligeholdelsen af, at gruppen selv fastlægger og overholder konventioner for filstruktur og dataflow.
 
-\subsection*{React}
-React er en meget udbredt UI-library til at bygge komponentbaserede brugergrænseflader. Reacts styrke er fleksibilitet, stort ecosystem og mange tilgængelige biblioteker til routing, state management, formularer og UI-komponenter. Det kunne være en fordel for Echo, fordi gruppen kan vælge præcis de biblioteker, der passer til projektet, og fordi React har et meget stort community.
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 7 \quad Vue: 7
 
-For Echo er React dog mindre oplagt ud fra gruppens kompetencer. Når gruppen kun har meget begrænset erfaring med React, vil en stor del af arbejdet gå med at lære hooks, state management, routing og projektstruktur. React giver heller ikke den samme samlede framework-struktur som Angular, hvilket betyder, at gruppen selv skal træffe flere arkitekturvalg omkring filstruktur, dataflow og biblioteker. Det kan være positivt for erfarne teams, men risikabelt i en bachelor-MVP med mange funktionelle krav.
+\subsection*{Performance (5\%)}
+Alle tre frameworks er modne og optimerede, og js-framework-benchmark viser, at forskellene mellem dem er små i forhold til, hvad en bruger vil kunne mærke i en typisk forretningsapplikation~\cite{js-framework-benchmark}. Angular har tidligere været kritiseret for større bundles, men fra version 21 bruger nye projekter zoneless change detection, som ifølge Angular-teamet reducerer bundlestørrelsen og forbedrer Core Web Vitals~\cite{angular-v21}. Alle tre understøtter lazy loading af ruter. For Echo vil performance primært afhænge af API-kald og billeder frem for valget af framework.
 
-React er derfor teknisk stærkt, men mindre hensigtsmæssigt for gruppen. Det ville især være et godt valg, hvis teamet allerede havde stærke React-kompetencer, eller hvis projektet havde brug for maksimal fleksibilitet i valg af biblioteker og UI-patterns.
+\medskip\noindent\textbf{Score:} Angular: 8 \quad React: 8 \quad Vue: 8
 
-\subsection*{Vue}
-Vue er et progressivt frontend-framework, som ofte fremhæves for sin tilgængelighed og simple komponentmodel. Vue Single-File Components gør det nemt at samle template, logik og styling i samme komponentfil, og Vue har officielle løsninger til routing og state management gennem Vue Router og Pinia. Det gør Vue relevant for Echo, da platformen har behov for genbrugelige komponenter og overskuelig håndtering af brugerstatus, opgaver og rewards.
+\subsection*{Kompetencer i gruppen (10\%)}
+Gruppen føler sig generelt ikke stærk i frontend-udvikling. Under praktikperioden og de efterfølgende studiejob har fokus primært ligget på backend, og i tidligere kurser har gruppen i vid udstrækning brugt AI-værktøjer til at udvikle frontenden, fordi andre dele af projekterne havde højere prioritet. Den praktiske erfaring med frontend-frameworks er derfor mindre, end antallet af gennemførte projekter antyder. React er det framework, gruppen har mest erfaring med, da det er blevet undervist i et kursus og anvendt i et tidligere semesterprojekt. Erfaringen med Angular er mere begrænset, og Angulars stejlere læringskurve gør oplæringen mere krævende. Vue har gruppen næsten ingen erfaring med. Uanset valg vil en del af projektets første fase skulle bruges på oplæring, hvilket er en risiko i et tidsbegrænset bachelorprojekt.
 
-Vue kan være hurtigere at lære end Angular og mere samlet end React, hvilket gør det interessant for en MVP. Til gengæld har gruppen kun begrænset erfaring med Vue, og Angular-kompetencerne er markant stærkere. Vue kan derfor give et godt teknisk kompromis, men ikke nødvendigvis den bedste udviklingshastighed for netop denne gruppe.
+\medskip\noindent\textbf{Score:} Angular: 4 \quad React: 5 \quad Vue: 2
 
-Samlet set er Vue et godt framework til en web-app som Echo, især hvis fokus er på hurtig UI-udvikling og enkel komponentstruktur. Det vurderes dog lavere end Angular, fordi gruppens kompetencer og Angulars mere komplette framework-struktur passer bedre til projektets mange rollebaserede flows.
+\subsection*{Ecosystem/tooling (5\%)}
+React har det største ecosystem og bruges af knap halvdelen af respondenterne i Stack Overflows udviklerundersøgelse fra 2025, mens Angular og Vue hver bruges af under en femtedel~\cite{so-survey-2025}. Det giver React det største udvalg af biblioteker og det største community. Angular har til gengæld det mest integrerede tooling: Angular CLI håndterer generering af komponenter, build og test~\cite{angular-cli}, og siden version 21 er Vitest standard-testrunner~\cite{angular-v21}. Vue har et solidt, men mindre ecosystem, og bygger typisk på Vite og Vitest~\cite{vue-testing}.
+
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 10 \quad Vue: 8
+
+\subsection*{Fremtidig skalerbarhed (5\%)}
+Alle tre understøtter opdeling i komponenter og lazy loading, så applikationen kan vokse med flere sider og roller uden at blive tungere at indlæse. Angulars fastlagte struktur skalerer godt, når både kodebase og antal udviklere vokser, og frameworket bruges bredt i store virksomhedsapplikationer. React bruges ligeledes i meget stor skala, men forudsætter, at teamet har etableret faste konventioner. Vue skalerer også fint, men har færre udbredte konventioner for meget store applikationer.
+
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 9 \quad Vue: 8
+
+\subsection*{Responsivt webdesign og mobilvisning (10\%)}
+Responsivt design løses primært med CSS i form af media queries, flexbox og grid og er dermed i vid udstrækning uafhængigt af frameworket~\cite{mdn-responsive}. Alle tre kan kombineres med CSS-frameworks som Tailwind eller Bootstrap og har komponentbiblioteker med responsive komponenter, f.eks. Angular Material, MUI og Vuetify. Angular CDK tilbyder desuden \texttt{BreakpointObserver}, som kan tilpasse komponenters adfærd efter skærmstørrelse~\cite{angular-cdk-layout}. Kriteriet adskiller derfor ikke kandidaterne, men er medtaget, fordi mobilvisning er et centralt krav til Echo.
+
+\medskip\noindent\textbf{Score:} Angular: 8 \quad React: 8 \quad Vue: 8
+
+\subsection*{Formularer, routing og rollebaseret navigation (10\%)}
+Echo indeholder mange formularer til konto, login, opgaver og rewards samt navigation, der afhænger af brugerens rolle. Angular har Reactive Forms med typede formularer og validering indbygget~\cite{angular-reactive-forms}, og routeren understøtter guards, der kan begrænse adgangen til ruter ud fra brugerens rolle~\cite{angular-route-guards}. Vue Router er officielt og understøtter navigation guards~\cite{vue-router-guards}, men formularvalidering kræver et tredjepartsbibliotek som VeeValidate. I React er hverken routing eller formularvalidering en del af biblioteket, så begge dele løses med tredjepartsbiblioteker som React Router og React Hook Form. Uanset valg er rollebaseret navigation i frontenden kun en brugeroplevelse, og den egentlige adgangskontrol skal håndhæves i backenden.
+
+\medskip\noindent\textbf{Score:} Angular: 10 \quad React: 7 \quad Vue: 8
+
+\subsection*{State management og API-integration (10\%)}
+Frontenden skal holde styr på loginstatus, brugerrolle, opgavelister og saldo. I Angular kan delt state placeres i services via dependency injection og gøres reaktiv med signals~\cite{angular-signals}, mens HttpClient med interceptors kan tilføje JWT-tokens til alle forespørgsler ét sted~\cite{angular-interceptors}. HttpClient bygger dog på RxJS, som tilføjer kompleksitet. Vue har Pinia som officiel løsning til delt state~\cite{pinia}, og React har indbygget \texttt{useState} og \texttt{useContext} suppleret af biblioteker som TanStack Query til server-data. Alle tre løser behovet godt, blot med forskellig grad af indbygget understøttelse.
+
+\medskip\noindent\textbf{Score:} Angular: 8 \quad React: 8 \quad Vue: 8
+
+\subsection*{Type safety og testbarhed (10\%)}
+Robusthed er vigtig i flows med betaling, roller og opgavestatus. Angular er bygget til TypeScript, og compileren kan også typetjekke templates~\cite{angular-template-typecheck}. Angular CLI opsætter testmiljøet automatisk med TestBed og Vitest~\cite{angular-testing}. Vue 3 er selv skrevet i TypeScript og har officiel understøttelse af typetjek i templates via \texttt{vue-tsc}~\cite{vue-typescript}, og Vitest anbefales til test~\cite{vue-testing}. React fungerer godt med TypeScript, men typerne vedligeholdes af communityet i pakken \texttt{@types/react}~\cite{react-typescript}, og der findes ingen officiel testopsætning, så gruppen selv skal vælge værktøjer som React Testing Library.
+
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 7 \quad Vue: 8
+
+\subsection*{Komponentstruktur og design system (5\%)}
+Alle tre er komponentbaserede og understøtter genbrugelige komponenter på tværs af opgaver, rewards, profiler og ratings. Angular har med Angular Material et officielt komponentbibliotek, der sikrer ensartet design og tilgængelighed~\cite{angular-material}. React har det bredeste udvalg af design systems, f.eks. MUI og shadcn/ui, og komponentmodellen er meget fleksibel. Vue har gode biblioteker som Vuetify og PrimeVue, men udvalget er mindre.
+
+\medskip\noindent\textbf{Score:} Angular: 9 \quad React: 9 \quad Vue: 8
 
 \subsection{Scoring}
 Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede score er beregnet ud fra kriteriets vægt.
@@ -94,15 +123,13 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{Angular} & \textbf{React} & \textbf{Vue} \\
         \hline
-        Egnethed til projektet & 15\% & 9 & 5 & 7 \\
-        \hline
-        Udviklingshastighed & 10\% & 8 & 4 & 7 \\
+        Egnethed til projektet & 20\% & 9 & 7 & 7 \\
         \hline
         Maintainability & 10\% & 9 & 7 & 7 \\
         \hline
         Performance & 5\% & 8 & 8 & 8 \\
         \hline
-        Kompetencer i gruppen & 10\% & 7 & 1 & 2 \\
+        Kompetencer i gruppen & 10\% & 4 & 5 & 2 \\
         \hline
         Ecosystem/tooling & 5\% & 9 & 10 & 8 \\
         \hline
@@ -110,16 +137,16 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
         \hline
         Responsivt webdesign og mobilvisning & 10\% & 8 & 8 & 8 \\
         \hline
-        Formularer, routing og rollebaseret navigation & 8\% & 10 & 7 & 8 \\
+        Formularer, routing og rollebaseret navigation & 10\% & 10 & 7 & 8 \\
         \hline
-        State management og API-integration & 8\% & 8 & 8 & 8 \\
+        State management og API-integration & 10\% & 8 & 8 & 8 \\
         \hline
-        Type safety og testbarhed & 7\% & 9 & 7 & 8 \\
+        Type safety og testbarhed & 10\% & 9 & 7 & 8 \\
         \hline
-        Komponentstruktur og design system & 7\% & 9 & 9 & 8 \\
+        Komponentstruktur og design system & 5\% & 9 & 9 & 8 \\
         \hline
         \rowcolor{gray!30}
-        \textbf{Vægtet score} & \textbf{100\%} & \textbf{8,55} & \textbf{6,42} & \textbf{7,05} \\
+        \textbf{Vægtet score} & \textbf{100\%} & \textbf{8,35} & \textbf{7,40} & \textbf{7,10} \\
         \hline
     \end{tabularx}
     \caption{Scoring af frontend-kandidater}
@@ -127,13 +154,7 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
 \end{table}
 
 \subsection*{Beslutning}
-\textbf{Version 1: Valg af Angular}
-
-På baggrund af analysen vurderes Angular som det mest hensigtsmæssige valg for Echo. Angular scorer højest samlet, fordi frameworket passer godt til en større web-app med mange brugerroller, formularer, routes og API-kald. Samtidig har gruppen markant bedre kompetencer i Angular end i React og Vue, hvilket reducerer risikoen i udviklingsprocessen og gør det mere realistisk at nå en funktionel MVP.
+På baggrund af analysen vurderes Angular som det mest hensigtsmæssige valg for Echo. Angular scorer højest samlet, fordi frameworket passer godt til en større web-app med mange brugerroller, formularer, routes og API-kald. Samtidig har gruppen markant bedre kompetencer i Angular end i React og Vue, hvilket reducerer risikoen i udviklingsprocessen og gør det mere realistisk at nå en funktionel MVP.\\
 
 Angulars struktur er også en fordel for rapporten, fordi det giver tydelige elementer at dokumentere: komponenter, services, route guards, formularer og dataflow. Valget understøtter derfor både produktets behov og bachelorprojektets behov for en forklarbar teknisk proces.
-
-\textbf{Version 2: Bedste teknologivalg uden hensyn til gruppens kompetencer}
-
-Hvis gruppens eksisterende kompetencer ikke vægtes højt, kunne React eller Vue også være relevante valg. React har det stærkeste ecosystem og størst fleksibilitet, mens Vue kan give en enklere og mere tilgængelig udviklingsoplevelse. For Echo vurderes React dog som mere krævende, fordi gruppen selv skal vælge og strukturere flere centrale biblioteker. Vue er et stærkt kompromis, men Angulars samlede framework-model passer fortsat bedst til Echos rollebaserede flows og behov for tydelig struktur.
 \end{document}
