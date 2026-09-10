@@ -15,6 +15,7 @@
 \usepackage{ltablex}
 \usepackage{longtable}
 \usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \keepXColumns
 \usepackage{minted}
 \usepackage[table]{xcolor}
@@ -183,7 +184,7 @@
 \tableofcontents
 \newpage
 
-\input{BILAG/ANALYSE/risiko}
+\subfile{BILAG/ANALYSE/risiko}
 
 % Intro til teknisk analyse
 \section{Teknisk analyse}
@@ -224,10 +225,10 @@ Hver afsnit er analyseret og vil få en score baseret på følgende kriterier. H
     \end{tabular}
 \end{table} 
 
-\input{BILAG/ANALYSE/systemarkitektur}
-\input{BILAG/ANALYSE/backend}
-\input{BILAG/ANALYSE/frontend}
-\input{BILAG/ANALYSE/database}
+\subfile{BILAG/ANALYSE/systemark2}
+\subfile{BILAG/ANALYSE/backend}
+\subfile{BILAG/ANALYSE/frontend}
+\subfile{BILAG/ANALYSE/database}
 
 % Konklusion på teknisk analyse
 \newpage
@@ -260,10 +261,9 @@ Følgende table indeholder gruppens samledet valg af tekniske værktøjer til ud
     \hline
 \end{tabular}
 
-\section{UI/UX analyse}
-\input{BILAG/ANALYSE/ui-ux}
+\subfile{BILAG/ANALYSE/ui-ux}
 
-% \bibliographystyle{plain}
-% \bibliography{bibliography/external, bibliography/libraries}
+\bibliographystyle{plain}
+\bibliography{bibliography/external,bibliography/libraries}
 \end{document}
 
