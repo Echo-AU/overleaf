@@ -1,25 +1,20 @@
-\documentclass[../main.tex]{subfiles}\begin{document}
+\documentclass[../C-analyse.tex]{subfiles}\begin{document}
 \section{Database}
-Dette afsnit analyserer valg af database til Echo. Databasen er en kritisk del af systemet, fordi platformen skal gemme brugere, roller, profiler, opgaver, tilbud, tildelinger, betalinger, Karma Koins, rewards, transaktionshistorik og ratings. Valget af database har derfor stor betydning for datakonsistens, sikkerhed, performance og hvor let systemet kan videreudvikles.
+Dette afsnit analyserer valg af database til Echo. Databasen er en kritisk del af systemet, fordi platformen skal gemme brugere, roller, profiler, opgaver, tilbud, tildelinger, betalinger, Karma Koins, rewards, transaktionshistorik og ratings. Valget af database har derfor stor betydning for datakonsistens, sikkerhed, performance og hvor let systemet kan videreudvikles.\\
 
 Analysen sammenligner PostgreSQL, MySQL og MongoDB. PostgreSQL og MySQL er relationelle databaser, mens MongoDB er en dokumentdatabase. Det giver en relevant sammenligning, fordi Echo både har strukturerede relationer mellem data og enkelte områder, såsom profiler eller rewards, hvor fleksibilitet kan være en fordel.
 
 \subsection{Krav}
-Echo stiller høje krav til datakonsistens. Flere user stories afhænger af, at data i forskellige dele af systemet hænger korrekt sammen. Når en opgave markeres som udført, kan det påvirke opgavestatus, betaling, Karma Koin-overførsel, transaktionshistorik og muligheden for at afgive rating. Databasen skal derfor understøtte transaktioner, relationer og constraints, så systemet ikke ender med ugyldige eller modstridende data.
+Echo stiller høje krav til datakonsistens. Flere user stories afhænger af, at data i forskellige dele af systemet hænger korrekt sammen. Når en opgave markeres som udført, kan det påvirke opgavestatus, betaling, Karma Koin-overførsel, transaktionshistorik og muligheden for at afgive rating. Databasen skal derfor understøtte transaktioner, relationer og constraints, så systemet ikke ender med ugyldige eller modstridende data.\\
 
-Databasen skal også understøtte effektiv filtrering og opslag. Contributors skal kunne gennemse tilgængelige opgaver og rewards, Organizations og Requesters skal kunne se tilmeldinger og tilbud, og brugere skal kunne se saldo, transaktionshistorik og omdømme. Derfor skal databasen kunne håndtere både relationelle forespørgsler, indeksering og datamodeller, der er nemme at forstå og vedligeholde.
+Databasen skal også understøtte effektiv filtrering og opslag. Contributors skal kunne gennemse tilgængelige opgaver og rewards, Organizations og Requesters skal kunne se tilmeldinger og tilbud, og brugere skal kunne se saldo, transaktionshistorik og omdømme. Derfor skal databasen kunne håndtere både relationelle forespørgsler, indeksering og datamodeller, der er nemme at forstå og vedligeholde.\\
 
-De ikke-funktionelle krav betyder desuden, at databasen skal kunne understøtte API-responstider på under 500 ms under normale forhold, sikker håndtering af data og en struktur, der gør test og dokumentation mulig. Da Echo indeholder økonomi-lignende data i form af Karma Koins og eventuelle betalinger, er auditability og historik særligt vigtigt.
-
-% Kandidater
-\begin{itemize}
-    \item PostgreSQL
-    \item MySQL
-    \item MongoDB
-\end{itemize}
+De ikke-funktionelle krav betyder desuden, at databasen skal kunne understøtte API-responstider på under 500 ms under normale forhold, sikker håndtering af data og en struktur, der gør test og dokumentation mulig. Da Echo indeholder økonomi-lignende data i form af Karma Koins og eventuelle betalinger, er auditability og historik særligt vigtigt.\\
 
 % Kriterier
 For at analysere databasekandidaterne er der opstillet kriterier, som vægter datakonsistens og relationel modellering højt, fordi disse områder er centrale for Echo.
+
+% Kræver biblatex (eller natbib) og kilder.bib
 
 \begin{table}[H]
     \centering
@@ -29,9 +24,7 @@ For at analysere databasekandidaterne er der opstillet kriterier, som vægter da
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{Relevans for Echo} \\
         \hline
-        Egnethed til projektet & 15\% & Databasen skal passe til brugere, opgaver, betaling, rewards, transaktioner og ratings. \\
-        \hline
-        Udviklingshastighed & 10\% & Gruppen skal hurtigt kunne modellere og ændre databasen gennem projektet. \\
+        Egnethed til projektet & 20\% & Databasen skal passe til brugere, opgaver, betaling, rewards, transaktioner og ratings. \\
         \hline
         Maintainability & 10\% & Datamodellen skal være overskuelig, dokumenterbar og nem at videreudvikle. \\
         \hline
@@ -43,15 +36,15 @@ For at analysere databasekandidaterne er der opstillet kriterier, som vægter da
         \hline
         Fremtidig skalerbarhed & 5\% & Databasen skal kunne håndtere vækst i brugere, opgaver og transaktioner. \\
         \hline
-        Relationel integritet og transaktioner & 12\% & Saldo, opgavestatus, betalinger og reward-indløsning kræver stærk konsistens. \\
+        Relationel integritet og transaktioner & 15\% & Saldo, opgavestatus, betalinger og reward-indløsning kræver stærk konsistens. \\
         \hline
-        Datamodel-fit til Echo & 8\% & Echos data består af mange relationer mellem brugere, roller, opgaver og transaktioner. \\
+        Datamodel-fit til Echo & 10\% & Echos data består af mange relationer mellem brugere, roller, opgaver og transaktioner. \\
         \hline
-        Søgning, filtrering og query-fleksibilitet & 7\% & Brugere skal kunne finde opgaver, rewards, transaktioner og ratings effektivt. \\
+        Søgning, filtrering og query-fleksibilitet & 5\% & Brugere skal kunne finde opgaver, rewards, transaktioner og ratings effektivt. \\
         \hline
-        Auditability og historik & 7\% & Transaktioner og saldoændringer skal kunne spores og forklares. \\
+        Auditability og historik & 10\% & Transaktioner og saldoændringer skal kunne spores og forklares. \\
         \hline
-        Drift og cloud-understøttelse & 6\% & Databasen skal være let at køre lokalt og deploye i en realistisk cloud-løsning. \\
+        Drift og cloud-understøttelse & 5\% & Databasen skal være let at køre lokalt og deploye i en realistisk cloud-løsning. \\
         \hline
         \rowcolor{gray!30}
         \textbf{Total} & \textbf{100\%} & \\
@@ -61,26 +54,60 @@ For at analysere databasekandidaterne er der opstillet kriterier, som vægter da
     \label{tab:database-kriterier}
 \end{table}
 
-\subsection*{PostgreSQL}
-PostgreSQL er en relationel database med stærk understøttelse af transaktioner, constraints, relationer, indeksering og avancerede SQL-forespørgsler. Det passer meget godt til Echo, fordi systemets centrale data er stærkt forbundet. Brugere har roller, opgaver har ejere og Contributors, betalinger knyttes til opgaver, rewards indløses af brugere, og ratings bør kun kunne oprettes efter relevante fuldførte opgaver.
+\subsection*{Egnethed til projektet (20\%)}
+Echos centrale data er stærkt forbundet: brugere har roller, opgaver har ejere og Contributors, betalinger knyttes til opgaver, rewards indløses af brugere, og ratings bør kun kunne oprettes efter fuldførte opgaver. Det taler for en relationel database, og både PostgreSQL og MySQL kan modellere domænet direkte. Egnetheden afhænger desuden af samspillet med den valgte backend. PostgreSQL har en veludviklet EF Core-provider, Npgsql, som følger EF Core's udgivelser tæt~\cite{npgsql-efcore}. Den mest udbredte MySQL-provider, Pomelo, er communitydrevet, og understøttelsen af EF Core 10 har været under udvikling siden august 2025~\cite{pomelo-efcore10}. MongoDB har en officiel EF Core-provider, men den understøtter hverken foreign keys, migrations eller joins~\cite{mongodb-efcore-limitations}, hvilket passer dårligt til Echos mest kritiske domæner.
 
-PostgreSQL er særligt stærk i forhold til datakonsistens og auditability. Saldo, Karma Koins og transaktionshistorik kan modelleres relationelt og beskyttes med foreign keys, constraints og transaktioner. Det gør det lettere at sikre, at en saldoændring altid hænger sammen med en transaktion, og at en reward-indløsning ikke registreres uden korrekt bruger og pris.
+\medskip\noindent\textbf{Score:} PostgreSQL: 10 \quad MySQL: 8 \quad MongoDB: 5
 
-PostgreSQL har også et stærkt ecosystem og fungerer godt sammen med moderne backend-frameworks og ORM-værktøjer. Ulempen er, at gruppens kompetence kun vurderes middel, men dette opvejes af, at relationelle databaser passer meget naturligt til Echo. PostgreSQL vurderes derfor som det stærkeste samlede valg.
+\subsection*{Maintainability (10\%)}
+I en relationel database er datamodellen eksplicit defineret i skemaet, hvilket gør den let at dokumentere, f.eks. med ER-diagrammer. Med EF Core-migrations kan skemaændringer versioneres sammen med koden~\cite{ef-migrations}. PostgreSQL understøtter transaktionel DDL, så en migration, der fejler halvvejs, rulles helt tilbage~\cite{pg-transactional-ddl}. I MySQL medfører DDL-sætninger derimod et implicit commit~\cite{mysql-implicit-commit}, og en fejlet migration kan derfor efterlade skemaet delvist opdateret. MongoDB er skemafrit, så strukturen lever primært i applikationskoden. Skemavalidering kan tilføjes~\cite{mongodb-schema-validation}, men da EF Core-provideren ikke understøtter migrations, skal ændringer i dokumentstrukturen håndteres manuelt.
 
-\subsection*{MySQL}
-MySQL er også en relationel database og er derfor relevant at sammenligne med PostgreSQL. Den kan håndtere Echos centrale relationer og transaktioner, især når InnoDB anvendes. MySQL er udbredt, veldokumenteret og understøttet af mange hostingmiljøer, backend-frameworks og administrationsværktøjer.
+\medskip\noindent\textbf{Score:} PostgreSQL: 9 \quad MySQL: 8 \quad MongoDB: 6
 
-For Echo vil MySQL kunne løse mange af de samme grundlæggende behov som PostgreSQL: brugere, opgaver, rewards, betalinger og ratings kan modelleres relationelt, og transaktioner kan bruges til at beskytte kritiske workflows. Det gør MySQL til et realistisk valg, især hvis gruppen eller deploymentmiljøet allerede havde stærk erfaring med teknologien.
+\subsection*{Performance (5\%)}
+Alle tre databaser er modne og yder rigeligt til Echos forventede belastning, hvor indeksering og forespørgselsdesign vil betyde mere end valget af database. PostgreSQL tilbyder flere indekstyper, herunder partielle indekser, som f.eks. kun indekserer aktive opgaver~\cite{pg-partial-indexes}. MongoDB er hurtig til at læse hele dokumenter, men forespørgsler på tværs af collections er dyrere. Kriteriet adskiller derfor ikke kandidaterne væsentligt.
 
-MySQL vurderes dog lidt lavere end PostgreSQL, fordi PostgreSQL generelt giver en stærkere platform til komplekse datamodeller, avancerede queries og fleksibilitet i et system, der både har relationelle data og potentielt mere varierede datafelter. MySQL er derfor et godt alternativ, men ikke det mest oplagte valg for Echo.
+\medskip\noindent\textbf{Score:} PostgreSQL: 8 \quad MySQL: 8 \quad MongoDB: 8
 
-\subsection*{MongoDB}
-MongoDB er en dokumentdatabase, hvor data gemmes som fleksible dokumenter frem for faste relationelle tabeller. Det kan være en fordel i systemer, hvor dataformen ændrer sig ofte, eller hvor objekter kan gemmes naturligt som dokumenter. For Echo kunne MongoDB eksempelvis være relevant til fleksible profiler, reward-beskrivelser eller aktivitetsmetadata.
+\subsection*{Kompetencer i gruppen (10\%)}
+Gruppens erfaring med PostgreSQL vurderes som middel og er dermed den højeste af de tre. Erfaringen med MySQL er mere begrænset, og MongoDB har gruppen mindst erfaring med. Et valg af MongoDB ville desuden kræve, at gruppen lærer at modellere data som dokumenter frem for tabeller, hvilket er et større skift end mellem to relationelle databaser.
 
-MongoDB passer dog dårligere til Echos mest kritiske domæner. Systemet har mange relationer og workflows, hvor konsistens er vigtig: opgaver knyttes til brugere, betalinger knyttes til udførte opgaver, Karma Koins skal påvirke saldo og transaktionshistorik, og ratings bør afhænge af tidligere interaktioner. Selvom MongoDB understøtter transaktioner, vil datamodellen ofte kræve mere manuel håndtering af relationer og konsistens end en relationel database.
+\medskip\noindent\textbf{Score:} PostgreSQL: 6 \quad MySQL: 4 \quad MongoDB: 3
 
-MongoDB kan derfor være interessant i en arkitekturdiskussion, men vurderes ikke som det bedste valg for Echo. Fleksibiliteten er en fordel, men projektets behov for relationel integritet, transaktionshistorik og auditability vejer tungere.
+\subsection*{Ecosystem/tooling (5\%)}
+PostgreSQL er den mest anvendte database i Stack Overflows udviklerundersøgelse fra 2025, og MySQL er ligeledes blandt de mest udbredte~\cite{so-survey-2025}. Begge har modne administrationsværktøjer som pgAdmin og MySQL Workbench, officielle Docker-images og bred ORM-understøttelse. MongoDB har gode værktøjer som Compass og Atlas, men integrationen med EF Core er begrænset, som beskrevet under egnethed.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 9 \quad MySQL: 9 \quad MongoDB: 8
+
+\subsection*{Fremtidig skalerbarhed (5\%)}
+MongoDB er designet til horisontal skalering og kan fordele data på flere servere via sharding~\cite{mongodb-sharding}. PostgreSQL og MySQL skaleres typisk vertikalt og med read replicas, mens horisontal opdeling kræver udvidelser eller ekstra værktøjer. For Echo ligger den forventede datamængde dog langt inden for, hvad én relationel databaseinstans kan håndtere.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 8 \quad MySQL: 8 \quad MongoDB: 9
+
+\subsection*{Relationel integritet og transaktioner (15\%)}
+Saldo, opgavestatus, betalinger og reward-indløsning kræver, at data altid er konsistente. PostgreSQL håndhæver forretningsregler direkte i databasen med foreign keys, unique- og check-constraints~\cite{pg-constraints}, så f.eks. en saldo aldrig kan blive negativ. PostgreSQL tilbyder desuden ægte serialiserbar isolation, som forhindrer samtidighedsfejl ved parallelle saldoændringer~\cite{pg-isolation}. MySQL med InnoDB er også fuldt ACID-kompatibel~\cite{mysql-acid} og har understøttet check-constraints siden version 8.0.16~\cite{mysql-check}. MongoDB har understøttet transaktioner på tværs af dokumenter siden version 4.0~\cite{mongodb-transactions}, men har ingen foreign keys, så referentiel integritet skal sikres i applikationskoden. Det øger risikoen for inkonsistente data i netop de flows, hvor Echo har mindst tolerance for fejl.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 10 \quad MySQL: 9 \quad MongoDB: 5
+
+\subsection*{Datamodel-fit til Echo (10\%)}
+Mange af Echos relationer er mange-til-mange, f.eks. mellem opgaver og Contributors eller mellem brugere og roller, og de modelleres naturligt med koblingstabeller. PostgreSQL kombinerer den relationelle model med datatypen JSONB, der kan indekseres og bruges til mere varierede felter som reward-beskrivelser eller aktivitetsmetadata~\cite{pg-json}. MySQL har også en JSON-datatype~\cite{mysql-json}, men færre muligheder for at indeksere og forespørge på JSON-data. MongoDB passer godt til selvstændige dokumenter som profiler, men mange-til-mange-relationer kræver enten referencer eller duplikering af data~\cite{mongodb-data-modeling}.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 10 \quad MySQL: 8 \quad MongoDB: 6
+
+\subsection*{Søgning, filtrering og query-fleksibilitet (5\%)}
+Både PostgreSQL og MySQL 8 understøtter joins, common table expressions og window functions~\cite{mysql-window}, hvilket gør det let at filtrere opgaver, rewards og transaktioner på tværs af tabeller. PostgreSQL har desuden indbygget fuldtekstsøgning med rangering af resultater~\cite{pg-textsearch}, som kan bruges til at søge i opgavebeskrivelser. MySQL har også fuldtekstindekser, men med færre muligheder. MongoDB har et fleksibelt forespørgselssprog og en aggregation pipeline, men forespørgsler på tværs af collections kræver \texttt{\$lookup}~\cite{mongodb-lookup}, og den avancerede søgefunktion Atlas Search er kun tilgængelig i MongoDB's cloudtjeneste.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 9 \quad MySQL: 7 \quad MongoDB: 6
+
+\subsection*{Auditability og historik (10\%)}
+Alle saldoændringer i Echo skal kunne spores og forklares. I en relationel database kan det modelleres som en transaktionstabel, hvor der kun tilføjes rækker, og hvor foreign keys sikrer, at hver transaktion peger på en gyldig bruger og opgave. PostgreSQL kan desuden automatisk logge ændringer med triggers~\cite{pg-triggers}. MySQL understøtter også triggers, men de aktiveres ikke af kaskaderende foreign key-handlinger~\cite{mysql-fk}, så f.eks. sletninger, der sker via kaskade, ikke bliver logget. MongoDB kan registrere ændringer via change streams~\cite{mongodb-change-streams}, men uden foreign keys afhænger sporbarheden af, at applikationen konsekvent skriver historikken korrekt.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 10 \quad MySQL: 8 \quad MongoDB: 5
+
+\subsection*{Drift og cloud-understøttelse (5\%)}
+Alle tre databaser kan køres lokalt via officielle Docker-images og tilbydes som administrerede cloudtjenester. PostgreSQL og MySQL udbydes bl.a. af Azure og AWS, hvor Azure Database for PostgreSQL passer naturligt til en .NET-baseret backend~\cite{azure-postgresql}. MongoDB tilbydes primært via MongoDB Atlas, som kan køre hos alle de store cloududbydere~\cite{mongodb-atlas}. Kriteriet adskiller derfor ikke kandidaterne.
+
+\medskip\noindent\textbf{Score:} PostgreSQL: 8 \quad MySQL: 8 \quad MongoDB: 8
 
 \subsection{Scoring}
 Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede score er beregnet ud fra kriteriets vægt.
@@ -93,9 +120,7 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{PostgreSQL} & \textbf{MySQL} & \textbf{MongoDB} \\
         \hline
-        Egnethed til projektet & 15\% & 10 & 8 & 5 \\
-        \hline
-        Udviklingshastighed & 10\% & 8 & 8 & 7 \\
+        Egnethed til projektet & 20\% & 10 & 8 & 5 \\
         \hline
         Maintainability & 10\% & 9 & 8 & 6 \\
         \hline
@@ -107,18 +132,18 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
         \hline
         Fremtidig skalerbarhed & 5\% & 8 & 8 & 9 \\
         \hline
-        Relationel integritet og transaktioner & 12\% & 10 & 9 & 5 \\
+        Relationel integritet og transaktioner & 15\% & 10 & 9 & 5 \\
         \hline
-        Datamodel-fit til Echo & 8\% & 10 & 7 & 6 \\
+        Datamodel-fit til Echo & 10\% & 10 & 8 & 6 \\
         \hline
-        Søgning, filtrering og query-fleksibilitet & 7\% & 9 & 7 & 6 \\
+        Søgning, filtrering og query-fleksibilitet & 5\% & 9 & 7 & 6 \\
         \hline
-        Auditability og historik & 7\% & 10 & 8 & 5 \\
+        Auditability og historik & 10\% & 10 & 8 & 5 \\
         \hline
-        Drift og cloud-understøttelse & 6\% & 8 & 8 & 8 \\
+        Drift og cloud-understøttelse & 5\% & 8 & 8 & 8 \\
         \hline
         \rowcolor{gray!30}
-        \textbf{Vægtet score} & \textbf{100\%} & \textbf{8,86} & \textbf{7,62} & \textbf{5,93} \\
+        \textbf{Vægtet score} & \textbf{100\%} & \textbf{9,10} & \textbf{7,75} & \textbf{5,70} \\
         \hline
     \end{tabularx}
     \caption{Scoring af databasekandidater}
@@ -126,14 +151,7 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
 \end{table}
 
 \subsection*{Beslutning}
-
-\textbf{Version 1: Valg af PostgreSQL}
-
-På baggrund af analysen vurderes PostgreSQL som det bedste databasevalg for Echo. Databasen passer stærkt til projektets relationelle datamodel og de transaktionskritiske workflows omkring opgaver, betalinger, Karma Koins, rewards og ratings. PostgreSQL gør det muligt at arbejde med foreign keys, constraints og transaktioner, hvilket styrker systemets datakonsistens og brugernes tillid til platformen.
+På baggrund af analysen vurderes PostgreSQL som det bedste databasevalg for Echo. Databasen passer stærkt til projektets relationelle datamodel og de transaktionskritiske workflows omkring opgaver, betalinger, Karma Koins, rewards og ratings. PostgreSQL gør det muligt at arbejde med foreign keys, constraints og transaktioner, hvilket styrker systemets datakonsistens og brugernes tillid til platformen.\\
 
 Selvom gruppens kompetence i PostgreSQL kun vurderes middel, opvejes dette af teknologiens egnethed til produktet. PostgreSQL giver samtidig et godt grundlag for rapporten, fordi gruppen kan dokumentere datamodel, relationer, transaktionsflows og centrale designvalg tydeligt gennem ER-diagrammer og databaseanalyse.
-
-\textbf{Version 2: Bedste teknologivalg uden hensyn til gruppens kompetencer}
-
-Hvis gruppens kompetencer ikke vægtes højt, vurderes PostgreSQL stadig som det bedste valg. MySQL er et realistisk alternativ og kan håndtere mange af de samme relationelle behov, men PostgreSQL vurderes stærkere til Echos kombination af komplekse relationer, transaktioner, query-fleksibilitet og fremtidig udvidelse. MongoDB er mest relevant, hvis fleksible dokumentstrukturer vægtes højere end relationel konsistens, men det passer dårligere til Echos betalinger, saldo og transaktionshistorik.
 \end{document}

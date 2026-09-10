@@ -1,22 +1,15 @@
-\documentclass[../main.tex]{subfiles}\begin{document}
+\documentclass[../C-analyse.tex]{subfiles}\begin{document}
 \section{Backend}
-Dette afsnit analyserer valg af backend-teknologi for Echo. Backenden er central for projektet, fordi den skal håndtere forretningslogik, rollebaseret adgangskontrol, opgavestatus, betalinger, Karma Koins, rewards, ratings og kommunikation med databasen. Valget af backend-teknologi påvirker derfor både systemets sikkerhed, udviklingshastighed, testbarhed og hvor let arkitekturen kan dokumenteres og videreudvikles.
+Dette afsnit analyserer valg af backend-teknologi for Echo. Backenden er central for projektet, fordi den skal håndtere forretningslogik, rollebaseret adgangskontrol, opgavestatus, betalinger, Karma Koins, rewards, ratings og kommunikation med databasen. Valget af backend-teknologi påvirker derfor både systemets sikkerhed, udviklingshastighed, testbarhed og hvor let arkitekturen kan dokumenteres og videreudvikles.\\
 
 Analysen sammenligner ASP.NET Core med C\#, Go og Node.js. De tre teknologier er relevante, fordi de alle kan bruges til moderne API-baserede websystemer, men de har forskellige styrker i forhold til struktur, performance, ecosystem og gruppens kompetencer.
 
 \subsection{Krav}
-Echo kræver en backend, der kan håndtere flere roller og sikre, at brugere kun kan udføre handlinger, de er autoriseret til. Det gælder eksempelvis oprettelse af rewards, tildeling af opgaver, overførsel af Karma Koins og betaling for udførte opgaver. Backenden skal derfor understøtte sikker authentication og authorization, samt gøre det let at placere adgangskontrol tæt på API'erne og forretningslogikken.
+Echo kræver en backend, der kan håndtere flere roller og sikre, at brugere kun kan udføre handlinger, de er autoriseret til. Det gælder eksempelvis oprettelse af rewards, tildeling af opgaver, overførsel af Karma Koins og betaling for udførte opgaver. Backenden skal derfor understøtte sikker authentication og authorization, samt gøre det let at placere adgangskontrol tæt på API'erne og forretningslogikken.\\
 
-Backenden skal også kunne håndtere transaktioner og datakonsistens. Flere user stories kobler opgaver, saldo, transaktionshistorik og ratings sammen. Når en opgave markeres som udført, skal relaterede ændringer ske kontrolleret, så systemet ikke ender med forkert saldo, manglende transaktioner eller ratings uden gyldig opgavehistorik.
+Backenden skal også kunne håndtere transaktioner og datakonsistens. Flere user stories kobler opgaver, saldo, transaktionshistorik og ratings sammen. Når en opgave markeres som udført, skal relaterede ændringer ske kontrolleret, så systemet ikke ender med forkert saldo, manglende transaktioner eller ratings uden gyldig opgavehistorik.\\
 
-Derudover skal backenden kunne leve op til de ikke-funktionelle krav om API-responstid på under 500 ms under normale forhold, sikker sessionshåndtering med JWT, fejltolerance, dokumentation og testdækning. Teknologien skal derfor have stærk understøttelse af API-udvikling, databaseintegration, testing, logging og struktureret kode.
-
-% Kandidater
-\begin{itemize}
-    \item ASP.NET Core (C#)
-    \item GO (Golang)
-    \item Node.js
-\end{itemize}
+Derudover skal backenden kunne leve op til de ikke-funktionelle krav om API-responstid på under 500 ms under normale forhold, sikker sessionshåndtering med JWT, fejltolerance, dokumentation og testdækning. Teknologien skal derfor have stærk understøttelse af API-udvikling, databaseintegration, testing, logging og struktureret kode.\\
 
 % Kriterier
 For at analysere backend-teknologierne er der opstillet kriterier, som tager udgangspunkt i Echos funktionelle og ikke-funktionelle krav.
@@ -29,10 +22,7 @@ For at analysere backend-teknologierne er der opstillet kriterier, som tager udg
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{Relevans for Echo} \\
         \hline
-        Egnethed til projektet & 15\% & Teknologien skal passe til en API-backend med roller, opgaver, betaling, rewards og ratings. \\
-        Egnethed til projektet & 15\% & Teknologien skal passe til en API-backend med roller, opgaver, betaling, rewards og ratings. \\
-        \hline
-        Udviklingshastighed & 10\% & Gruppen skal kunne implementere en MVP med mange endpoints og workflows inden for projektperioden. \\
+        Egnethed til projektet & 20\% & Teknologien skal passe til en API-backend med roller, opgaver, betaling, rewards og ratings. \\
         \hline
         Maintainability & 10\% & Backenden skal kunne opdeles i services/moduler med klar forretningslogik og testbar struktur. \\
         \hline
@@ -44,15 +34,13 @@ For at analysere backend-teknologierne er der opstillet kriterier, som tager udg
         \hline
         Fremtidig skalerbarhed & 5\% & Backenden skal kunne vokse med flere brugere, services og integrationer. \\
         \hline
-        Authentication, authorization og sikkerhed & 10\% & Rollebaseret adgangskontrol, JWT og sikker håndtering af brugerdata er centrale krav. \\
+        Authentication, authorization og sikkerhed & 15\% & Rollebaseret adgangskontrol, JWT og sikker håndtering af brugerdata er centrale krav. \\
         \hline
-        Database- og transaktionsunderstøttelse & 10\% & Opgaver, saldo, betaling og Karma Koins kræver stabile databaseoperationer og transaktioner. \\
+        Database- og transaktionsunderstøttelse & 15\% & Opgaver, saldo, betaling og Karma Koins kræver stabile databaseoperationer og transaktioner. \\
         \hline
-        API-dokumentation og testbarhed & 8\% & Projektet kræver dokumenterede API'er og høj backend-testdækning. \\
+        API-dokumentation og testbarhed & 10\% & Projektet kræver dokumenterede API'er og høj backend-testdækning. \\
         \hline
-        Asynkrone processer og baggrundsjobs & 6\% & Email, notifikationer og eventuelle betalinger kan kræve asynkron behandling. \\
-        \hline
-        Arkitektonisk struktur og SOLID & 6\% & Teknologien skal gøre det let at arbejde med SOLID-principper og klar opdeling af ansvar. \\
+        Asynkrone processer og baggrundsjobs & 5\% & Email, notifikationer og eventuelle betalinger kan kræve asynkron behandling. \\
         \hline
         \rowcolor{gray!30}
         \textbf{Total} & \textbf{100\%} & \\
@@ -62,26 +50,61 @@ For at analysere backend-teknologierne er der opstillet kriterier, som tager udg
     \label{tab:backend-kriterier}
 \end{table}
 
-\subsection*{Analyse af ASP.NET Core}
-ASP.NET Core er et stærkt valg til Echo, fordi frameworket er bygget til moderne web-API'er og har indbygget understøttelse af dependency injection, middleware, authentication, authorization, logging og konfiguration. Det passer godt til et system, hvor rollebaseret adgangskontrol og struktureret forretningslogik er centralt. C\# som sprog giver desuden stærk typning, hvilket kan hjælpe gruppen med at opdage fejl tidligt i udviklingsprocessen.
+% Kræver biblatex (eller natbib) og kilder.bib
+% Scorerne i parentes svarer til tabel \ref{tab:backend-scoring}
 
-For Echo er ASP.NET Core særligt relevant, fordi mange workflows kræver tydelige services og transaktioner. Opgaver, betalinger, saldo og rewards kan struktureres i separate services eller moduler, mens Entity Framework Core kan bruges til databaseadgang og migrations. Det gør det lettere at arbejde med datamodeller, relationer og transaktionssikkerhed i et system, hvor korrekt saldo og transaktionshistorik er vigtigt.
+% Kræver biblatex (eller natbib) og kilder.bib
+% Scorerne svarer til tabel \ref{tab:backend-scoring}
 
-Den største fordel er dog gruppens kompetence i C\#. Når gruppen allerede har relativt høj erfaring med sproget, reduceres risikoen i projektet, og der bliver mere tid til at arbejde med arkitektur, test, dokumentation og rapportens tekniske refleksion. Ulempen er, at ASP.NET Core kan føles mere omfattende end en simpel Node.js-backend, men for Echo vurderes strukturen som en fordel frem for en byrde.
+\subsection*{Egnethed til projektet (20\%)}
+Alle tre teknologier kan bruges til at bygge web-API'er, men de passer forskelligt til Echo. ASP.NET Core leverer dependency injection, middleware, logging og konfiguration som en integreret del af frameworket~\cite{ms-di}. Det passer til et domæne, hvor opgaver, betalinger, saldo og rewards naturligt kan opdeles i services med tydelige ansvarsområder. Node.js er en event-drevet runtime, der er velegnet til API'er med mange I/O-operationer~\cite{node-event-loop}. Det passer til Echos integrationer som emails og notifikationer, og hvis gruppen vælger Angular i frontend, giver en TypeScript-backend ét fælles sprog på tværs af systemet. Go er designet til netværksservices, og standardbiblioteket understøtter siden Go 1.22 routing på HTTP-metoder og path-parametre~\cite{go-routing}. Go overlader dog flere arkitekturvalg til gruppen og ville være mere oplagt i en distribueret arkitektur med mange små services end i et domænetungt system som Echo.
 
-\subsection*{Analyse af GO/Golang}
-Go er et effektivt og performancestærkt sprog, som egner sig godt til webservices, API'er og concurrent programmering. Sproget har en enkel syntax, hurtig runtime og stærk standard library, hvilket gør det attraktivt til backend-systemer med høje krav til performance og driftssikkerhed. Hvis Echo skulle bygges som en mere distribueret servicearkitektur, kunne Go være relevant, fordi sproget ofte bruges til små, hurtige services.
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 7 \quad Node.js: 8
 
-For Echo er Go dog mindre stærkt i forhold til gruppens aktuelle situation. Kompetenceniveauet er lavere end i C\#, og Go kræver derfor mere oplæring, før gruppen kan arbejde effektivt med API-design, databaseadgang, authentication og test. Samtidig er Go mere minimalistisk end ASP.NET Core, hvilket betyder, at gruppen selv skal sammensætte flere arkitekturvalg og biblioteker.
+\subsection*{Maintainability (10\%)}
+C\# og Go er begge statisk typede, så mange fejl fanges ved kompilering frem for i drift. ASP.NET Core skiller sig ud ved den indbyggede dependency injection, der holder komponenter løst koblede, og ved en forudsigelig udgivelsesplan. Den aktuelle LTS-version, .NET 10, understøttes frem til november 2028~\cite{dotnet-support}. Go er bevidst simpelt, \texttt{gofmt} sikrer ensartet kodestil, og Go 1-kompatibilitetsløftet betyder, at eksisterende kode fortsat kan kompileres med nye versioner~\cite{go1compat}. Til gengæld findes der færre etablerede konventioner for at strukturere større forretningsapplikationer. Node.js står svagest. JavaScript er dynamisk typet, og Node.js' indbyggede TypeScript-understøttelse fjerner kun typerne uden at typetjekke koden~\cite{node-typescript}. Typesikkerhed kræver derfor et separat build-trin. Express har desuden ingen faste konventioner, så strukturen afhænger af gruppens disciplin.
 
-Go scorer højt på performance og skalerbarhed, men lavere på udviklingshastighed og kompetencer. Det gør teknologien interessant som et teknisk valg, men mindre optimal for en bachelor-MVP, hvor gruppen både skal nå et produkt og producere en solid rapport.
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 7 \quad Node.js: 6
 
-\subsection*{Analyse af Node.js}
-Node.js er en asynkron og event-drevet JavaScript-runtime, som er velegnet til netværksapplikationer og API'er med mange I/O-operationer. For Echo kan det være en fordel ved funktioner som API-kald, email, notifikationer og kommunikation mellem services. Node.js har desuden et meget stort ecosystem med frameworks som Express og NestJS, samt mange biblioteker til authentication, databaseadgang og dokumentation.
+\subsection*{Performance (5\%)}
+I TechEmpower Framework Benchmarks Round 23 ligger Go-frameworks blandt de hurtigste, og ASP.NET Core placerer sig ligeledes højt, mens udbredte Node.js-frameworks generelt ligger lavere~\cite{techempower-r23}. Go kompileres til native kode, og goroutines er så lette, at mange samtidige forespørgsler kan håndteres med lavt hukommelsesforbrug~\cite{effective-go}. Node.js' event-loop er effektivt til I/O, men da JavaScript-koden kører i én tråd, blokerer CPU-tungt arbejde alle andre forespørgsler~\cite{node-event-loop}. Benchmarkene er syntetiske og måler frameworkenes øvre grænse. Da Echos arbejde overvejende er databasebundet, vil alle tre levere tilstrækkelig performance i praksis. Det afspejles i kriteriets lave vægt.
 
-En fordel ved Node.js er, at JavaScript eller TypeScript kan bruges på både frontend og backend, hvilket kan give fælles sprog og hurtigere context-switching. Hvis gruppen vælger Angular i frontend, kan en TypeScript-baseret Node.js-backend derfor virke sammenhængende. Til gengæld har gruppen lavere kompetence i Node.js end i C\#, og Node.js kræver disciplin for at opnå samme arkitektoniske struktur og type-sikkerhed som ASP.NET Core.
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 10 \quad Node.js: 7
 
-Node.js vurderes som et godt alternativ, især hvis projektet prioriterer asynkrone integrationer og et bredt ecosystem. For Echo er det dog ikke det stærkeste samlede valg, fordi systemet har mange sikkerheds- og transaktionskritiske workflows, hvor gruppens C\#-kompetencer og ASP.NET Core's struktur giver en mere sikker udviklingsproces.
+\subsection*{Kompetencer i gruppen (10\%)}
+Gruppen har relativt høj erfaring med C\#, hvilket reducerer projektets risiko og frigør tid til arkitektur, test og dokumentation. Kompetencerne i Node.js er lavere. Erfaring med JavaScript eller TypeScript fra frontend giver et vist udgangspunkt, men backend-specifikke mønstre som middleware og ORM-valg kræver oplæring. Go er det mindst kendte sprog, og enkelte i gruppen har slet ikke arbejdet med det. I et tidsbegrænset bachelorprojekt er den nødvendige oplæring en betydelig risiko.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 8 \quad Go: 4 \quad Node.js: 5
+
+\subsection*{Ecosystem/tooling (5\%)}
+Node.js er den mest anvendte webteknologi i Stack Overflows udviklerundersøgelse fra 2025, og ASP.NET Core bruges af omkring en femtedel af respondenterne~\cite{so-survey-2025}. Begge har derfor store communities og biblioteker til stort set ethvert behov via henholdsvis npm og NuGet. .NET har desuden stærke IDE'er som Visual Studio og Rider. Go leveres med det stærkeste indbyggede tooling af de tre: \texttt{go build}, \texttt{go test}, \texttt{go vet}, \texttt{gofmt} og modulsystemet, og \texttt{govulncheck} kan scanne for kendte sårbarheder i afhængigheder~\cite{govulncheck}. Til gengæld er Go's biblioteksudvalg til forretningsnære funktioner som ORM og brugerstyring mindre og mere fragmenteret.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 8 \quad Node.js: 9
+
+\subsection*{Fremtidig skalerbarhed (5\%)}
+Alle tre kan køre som stateless services i containere og skaleres horisontalt. Go har en fordel, fordi sproget kompileres til små, selvstændige binærfiler med hurtig opstart og lavt hukommelsesforbrug. ASP.NET Core har typisk højere hukommelsesforbrug og længere opstartstid, selvom Native AOT-kompilering kan mindske forskellen~\cite{ms-native-aot}. Node.js håndterer mange samtidige forbindelser effektivt, men én proces udnytter kun én CPU-kerne til JavaScript-kode. Der skal derfor skaleres med flere processer, f.eks. via cluster-modulet eller flere containere~\cite{node-cluster}.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 8 \quad Go: 9 \quad Node.js: 8
+
+\subsection*{Authentication, authorization og sikkerhed (15\%)}
+Her er forskellen mellem teknologierne størst. ASP.NET Core Identity håndterer brugere, passwords og login, og JWT-baseret authentication understøttes direkte~\cite{ms-identity}. Autorisation kan defineres både rollebaseret og policy-baseret~\cite{ms-authz-roles, ms-authz-policies}, hvilket passer til Echos behov for at styre, hvilke roller der må oprette opgaver, godkende betalinger og ændre saldo. Node.js har modne biblioteker som Passport.js og NestJS' guards, men løsningen sammensættes af tredjepartspakker. Det øger eksponeringen for supply chain-angreb. Go's standardbibliotek indeholder kryptografiske primitiver, men ingen samlet løsning til brugerstyring og roller~\cite{go-std}. Gruppen skal derfor selv skrive mere sikkerhedskritisk kode, hvilket øger risikoen for fejl i et system med betalinger.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 6 \quad Node.js: 7
+
+\subsection*{Database- og transaktionsunderstøttelse (15\%)}
+Transaktionssikkerhed er central for Echo, hvor ændring af saldo og registrering i transaktionshistorikken skal ske atomisk. Alle tre teknologier understøtter databasetransaktioner, men integrationen er forskellig. Entity Framework Core giver migrations, relationer og LINQ-forespørgsler, og et kald til \texttt{SaveChanges} udføres som standard i én transaktion~\cite{ef-transactions}. Eksplicitte transaktioner kan bruges, når flere operationer skal lykkes eller fejle samlet. I Node.js understøtter ORM'er som Prisma og TypeORM relationer, migrations og transaktioner~\cite{prisma-transactions}, men ingen af dem er lige så tæt integreret med frameworket som EF Core. I Go understøtter \texttt{database/sql} transaktioner med \texttt{BeginTx}, \texttt{Commit} og \texttt{Rollback}~\cite{go-transactions}. Understøttelsen er solid, men lavniveau, og der findes ingen officiel ORM eller migrationsløsning. I både Node.js og Go falder valget og konfigurationen af værktøjer derfor på gruppen.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 7 \quad Node.js: 7
+
+\subsection*{API-dokumentation og testbarhed (10\%)}
+Fra .NET 9 kan ASP.NET Core generere OpenAPI-dokumentation uden tredjepartsbiblioteker~\cite{ms-openapi}. Integrationstest understøttes via \texttt{WebApplicationFactory}, som starter API'et i hukommelsen~\cite{ms-integration-tests}, og dependency injection gør det let at bruge mocks i unit tests. Go har høj testbarhed, da \texttt{testing}- og \texttt{httptest}-pakkerne er en del af standardbiblioteket~\cite{go-testing, go-httptest}, men OpenAPI-dokumentation kræver tredjepartsværktøjer som swaggo eller oapi-codegen. I Node.js afhænger det af frameworkvalget. NestJS kan generere OpenAPI-dokumentation automatisk ud fra controllere og DTO'er~\cite{nestjs-openapi}, og Node.js har en stabil indbygget test runner~\cite{node-test}. Med Express kræver dokumentation derimod mere manuelt arbejde, og Node.js' score kunne derfor hæves til 8, hvis NestJS blev valgt.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 7 \quad Node.js: 7
+
+\subsection*{Asynkrone processer og baggrundsjobs (5\%)}
+Echo har behov for baggrundsopgaver som afsendelse af emails, notifikationer og periodisk beregning af rewards. C\# har \texttt{async}/\texttt{await} indbygget, og ASP.NET Core understøtter baggrundsopgaver via \texttt{IHostedService} og \texttt{BackgroundService}~\cite{ms-hosted-services}. Til planlagte og persistente jobs findes modne biblioteker som Hangfire og Quartz.NET. I Go er goroutines og channels en del af selve sproget, så baggrundsopgaver kan startes med få linjer kode og afbrydes kontrolleret via \texttt{context}~\cite{effective-go}. Node.js er stærk til asynkron I/O, men langvarige eller CPU-tunge jobs blokerer event-loopet og kræver worker threads~\cite{node-worker-threads} eller en ekstern jobkø som BullMQ. For alle tre kræver jobs, der skal overleve en genstart, en persistent kø.
+
+\medskip\noindent\textbf{Score:} ASP.NET Core: 9 \quad Go: 9 \quad Node.js: 8
 
 \subsection{Scoring}
 Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede score er beregnet ud fra kriteriets vægt.
@@ -94,32 +117,28 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
         \rowcolor{gray!30}
         \textbf{Kriterie} & \textbf{Vægt} & \textbf{ASP.NET Core} & \textbf{Go} & \textbf{Node.js} \\
         \hline
-        Egnethed til projektet & 15\% & 9 & 7 & 8 \\
-        \hline
-        Udviklingshastighed & 10\% & 8 & 5 & 7 \\
+        Egnethed til projektet & 20\% & 9 & 7 & 8 \\
         \hline
         Maintainability & 10\% & 9 & 7 & 6 \\
         \hline
-        Performance & 5\% & 8 & 10 & 7 \\
+        Performance & 5\% & 9 & 10 & 7 \\
         \hline
         Kompetencer i gruppen & 10\% & 8 & 4 & 5 \\
         \hline
-        Ecosystem/tooling & 5\% & 9 & 7 & 9 \\
+        Ecosystem/tooling & 5\% & 9 & 8 & 9 \\
         \hline
         Fremtidig skalerbarhed & 5\% & 8 & 9 & 8 \\
         \hline
-        Authentication, authorization og sikkerhed & 10\% & 9 & 6 & 7 \\
+        Authentication, authorization og sikkerhed & 15\% & 9 & 6 & 7 \\
         \hline
-        Database- og transaktionsunderstøttelse & 10\% & 9 & 7 & 7 \\
+        Database- og transaktionsunderstøttelse & 15\% & 9 & 7 & 7 \\
         \hline
-        API-dokumentation og testbarhed & 8\% & 9 & 7 & 7 \\
+        API-dokumentation og testbarhed & 10\% & 9 & 7 & 7 \\
         \hline
-        Asynkrone processer og baggrundsjobs & 6\% & 8 & 8 & 9 \\
-        \hline
-        Arkitektonisk struktur og SOLID & 6\% & 9 & 7 & 6 \\
+        Asynkrone processer og baggrundsjobs & 5\% & 9 & 9 & 8 \\
         \hline
         \rowcolor{gray!30}
-        \textbf{Vægtet score} & \textbf{100\%} & \textbf{8,64} & \textbf{6,71} & \textbf{7,06} \\
+        \textbf{Vægtet score} & \textbf{100\%} & \textbf{8,85} & \textbf{6,95} & \textbf{7,10} \\
         \hline
     \end{tabularx}
     \caption{Scoring af backend-kandidater}
@@ -127,15 +146,8 @@ Scoringen er baseret på en skala fra 1 til 10, hvor 10 er bedst. Den vægtede s
 \end{table}
 
 \subsection*{Beslutning}
-
-\textbf{Version 1: Valg af ASP.NET Core med C\#}
-
-På baggrund af analysen vurderes ASP.NET Core med C\# som det mest hensigtsmæssige backend-valg for Echo. Teknologien passer godt til en API-baseret platform med rollebaseret adgangskontrol, transaktioner, dokumentation og testbar forretningslogik. Samtidig har gruppen de stærkeste kompetencer i C\#, hvilket gør valget mere realistisk inden for projektets tidsramme.
+På baggrund af analysen vurderes ASP.NET Core med C\# som det mest hensigtsmæssige backend-valg for Echo. Teknologien passer godt til en API-baseret platform med rollebaseret adgangskontrol, transaktioner, dokumentation og testbar forretningslogik. Samtidig har gruppen de stærkeste kompetencer i C\#, hvilket gør valget mere realistisk inden for projektets tidsramme.\\
 
 ASP.NET Core giver også et godt grundlag for rapporten, fordi frameworkets struktur gør det let at beskrive services, controllers, dependency injection, databaseadgang og sikkerhed. Valget understøtter derfor både MVP-udviklingen og projektets akademiske fokus på proces og tekniske beslutninger.
-
-\textbf{Version 2: Bedste teknologivalg uden hensyn til gruppens kompetencer}
-
-Hvis gruppens kompetencer ikke vægtes højt, kunne Node.js eller Go være relevante alternativer. Go er stærkest på performance og egner sig godt til små, effektive services, mens Node.js er stærk til asynkrone API'er og har et meget stort ecosystem. For Echo vurderes ASP.NET Core dog stadig som det bedste samlede valg, fordi sikkerhed, transaktionskritiske workflows og struktureret backend-kode vægter højere end rå performance alene.
 
 \end{document}

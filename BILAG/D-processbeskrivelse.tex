@@ -1,5 +1,76 @@
 \documentclass[../main.tex]{subfiles}\begin{document}
 \section{Metode og process}
+\subsection{Process}
 
+En fuld beskrivelse af projektets proces og arbejdsgange findes i Bilag  $\rightarrow$ Procesbeskrivelse.
+
+\subsection{Metoder}
+Nedenfor uddybes de primære metoder og værktøjer, der anvendes til udviklingen af systemet.
+
+\subsubsection{Accepttestspecifikation}
+Vi anvender Gherkin-syntaksen til projektets accepttests. Gherkin binder forretningskrav og teknisk implementering sammen gennem sin "Givet-Når-Så" struktur, som gør det muligt at definere testbare scenarier i et naturligt sprog. Metoden sikrer, at vores accepttest afgrænses præcist, og at edge cases identificeres og håndteres.
+
+\subsubsection{Arkitektur og design} 
+Softwarearkitekturen dokumenteres og visualiseres med en kombination af C4-modellen og N+1-modellen. Det giver en tydelig adskillelse mellem systemets overordnede struktur og den specifikke implementering.
+
+\paragraph{C4:} Skaber et hierarkisk overblik over systemet på forskellige abstraktionsniveauer: Kontekstdiagrammet (interaktion med omverdenen), Containerdiagrammet (de overordnede softwarekomponenter) og Komponentdiagrammet (ansvarsfordelingen internt). Der anvendes diagramnøgler på alle modeller for at sikre en entydig forståelse.
+
+\subparagraph{Kodediagrammer:}
+Til at diagrammere koden og gå fra arkitektur til design er der anvendt applikationsmodellering fra N+1 modellen. Fremgangsmåden for applikationsmodellerne har været iterativ og har fulgt følgende metode:
+\begin{enumerate}
+    \item Konceptuelt sekvensdiagram udarbejdes med indledende tanker vedrørende User Stories implementering. 
+    \item Indledende nødvendige klasser identificeres og placeres i tomt klassediagram uden metoder.
+    \item Funktionaliteter udvikles ud fra koncept.
+    \item Reelt sekvensdiagram opdateres med aktuelle metoder og fundne nødvendige lifelines/klasser.
+    \item Fundne nødvendige klasser og metoder placeres i udfyldt klassediagram, der viser den reelle implementation.
+\end{enumerate}
+
+Step 3 til 5 gentages indtil produktets funktionalitet gennemfører accepttest og dermed afspejler funktionalitet applikationsmodellen, og det indledende koncept er stadig tydeligt.
+
+\subsubsection{N+1}
+Mens C4 beskriver strukturen, bruges N+1 til at dokumentere udvalgte tekniske perspektiver. For at undgå gentagelser fokuserer vi kun på de views, der direkte relaterer sig til softwaredesignet:
+
+\paragraph{Logical View:} 
+Applikationsmodeller, der beskriver, hvordan SW Systemet er gået fra Arkitekturens koncept til reel implementering.
+
+\paragraph{Process View:} 
+Her beskrives processer og threads, deres ansvar, samarbejde og selve allokeringen af de logiske elementer (lagene, subsystemer osv.).
+
+\paragraph{Deployment View:} 
+Den fysiske udrulning af processer og komponenter til noder, og hvor den fysiske netværksforbindelse mellem noderne etableres. Altså beskrives de forskellige kommunikationsprotokoller.
+
+\paragraph{Data View:} 
+Her beskrives et overblik over de data, der bruges i systemet. Det kan være data flows, databaser, både nye og allerede eksisterende, tabeller osv.
+
+\paragraph{Security View:} 
+Under Security View beskrives systemets sikkerhed. Dette gøres ved hjælp af en gennemgang af de sikkerhedsordninger og punkter i arkitekturen, hvor sikkerhed anvendes, såsom HTTP-autentifikation, databaseautentifikation osv.
+
+\paragraph{Implementation View:} Her repræsenterer modellen den reelle source code samt beskriver de leverancer (Deliverables) og det, der skaber disse. I afsnittet sker desuden en opsummering over den væsentlige organisering af det tidligere nævnte.
+
+\paragraph{Development View:} 
+Her opsummeres de informationer, fremtidige udviklere har brug for at vide om opsætningen af udviklingsmiljøet.
+
+\subsubsection{Applikationsmodellering (Fra arkitektur til design)} 
+Overgangen fra de overordnede arkitekturtegninger til den reelle kodebase sker iterativt:
+
+- Der udarbejdes et konceptuelt sekvensdiagram, der skitserer forløbet af en User Story.
+- De nødvendige klasser identificeres og samles i et tomt klassediagram.
+- Funktionaliteten udvikles i koden og verificeres mod accepttestene.
+- Efter endt udvikling opdateres sekvens- og klassediagrammerne med de endelige metoder, så de afspejler den faktiske kode.
+
+\subsubsection{Versionsstyringsværktøj og CI/CD}
+Projektets kodebase administreres i GitHub. For at sikre kodekvaliteten løbende har vi opsat en CI/CD-pipeline via GitHub Actions, som automatisk håndterer byggeprocesser, linting og softwaretests.\newline
+
+For at beskytte projektets main-branch er der opsat følgende GitHub Rulesets:
+
+- Direkte commits til main er blokeret; al kode skal indlejres via Pull Requests (PR).
+
+- En PR kræver mindst ét godkendt review før den kan merges.
+
+- Alle GitHub Actions skal bestå uden fejl, før koden kan merges.
+
+- Historikken holdes lineær ved kun at tillade "Squash and Rebase" (merge commits er deaktiveret).
+
+- GitHub CodeQL kører statisk analyse på alle PR's for at fange sikkerhedsrisici, dårlig kode og lækkede konfigurationsfiler.
 
 \end{document}

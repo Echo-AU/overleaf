@@ -1,4 +1,4 @@
-\documentclass[../main.tex]{subfiles}\begin{document}
+\documentclass[../C-analyse.tex]{subfiles}\begin{document}
 \section{Risikoanalyse}
 
 For at sikre projektets fremdrift udføres en risikoanalyse, der kortlægger de mest kritiske forhindringer. Målet er at etablere klare strategier for risikohåndtering, hvilket kan indebære alt fra direkte problemløsning til en justering af projektets samlede omfang.\newline
@@ -87,22 +87,22 @@ Analysen systematiseres i en risikomatrix, hvor de enkelte risici tildeles en "r
     \hline
     \endlastfoot % Dette markerer slutningen af foden for den sidste side
 
-    Risiko 1: Kommunikations problemer mellem Front-end og back-end & Unlikely & Moderate & \cellcolor{yellow!30}Medium & Gruppen sætter sig ned og der bug fixes, så problemet udredes \\
+    Risiko 1: Datakonflikter i grænsefladen mellem frontend og backend & Possible & Moderate & \cellcolor{yellow!30}Medium & API-endepunkter defineres via en fælles kontrakt (f.eks. OpenAPI/Swagger) inden implementering. Der anvendes DTO'er for at sikre en konsekvent datastruktur. \\
     \hline
     \rowcolor{gray!30}
-    Risiko 2: Lang responstid & Possible & Minor & \cellcolor{green!50}Low Medium & Gruppen finder, hvad der tilføjer responstid til hjemmesiden og prøver på at fikse det \\
+    Risiko 2: Kritiske teknologiske begrænsninger opdages sent & Unlikely & Severe & \cellcolor{orange!50}Med Hi & Inden den endelige teknologiske arkitektur fastlægges, udarbejdes en gennemgående teknisk analyse og et tidligt Proof of Concept (PoC) på projektets mest komplekse funktion. \\
     \hline
-    Risiko 3: Hjemmesiden kan ikke sende mails til bruger & Possible & Negligible & \cellcolor{green!30}Low & Email-systemet tjekkes eller ændres til en løsning er fundet \\
-    \hline
-    \rowcolor{gray!30}
-    Risiko 4: Manglende funktioner i software & Unlikely & Significant & \cellcolor{yellow!30}Medium & Enten bliver målene genafstemt, eller der skiftes til et andet framework der kan det vi ønsker \\
-    \hline
-    Risiko 5: Udfordringer i integrationen mellem webapp og database & Possible & Moderate & \cellcolor{yellow!30}Medium & Review hvad vi har lært i semestret \\
+    Risiko 3: Visuelle rendering-fejl på tværs af forskellige browsere og skærmstørrelser & Possible & Minor & \cellcolor{green!50}Low Med & Der anvendes et responsivt CSS-framework. Mindre kosmetiske afvigelser accepteres systematisk (Risk Acceptance), så længe systemets kernefunktionalitet er intakt. \\
     \hline
     \rowcolor{gray!30}
-    Risiko 6: Frontend stemmer ikke overens med gruppens vision & Possible & Minor & \cellcolor{green!50}Low Medium & Der tweakes indtil frontend kan accepteres \\
+    Risiko 4: Udfordringer med opsætning af cloud/deployment-miljø & Likely & Moderate & \cellcolor{yellow!30}Medium & Deployment-pipelinen opsættes i starten af projektet (eks. via GitHub Actions), så koden løbende integreres og testes \\
     \hline
-    Risiko 7: Udfordringer med brugerhåndtering & Possible & moderate & \cellcolor{yellow!30}Medium & Brugerhåndtering håndteres af et eksisterende bibliotek \\
+    Risiko 5: Skemakonflikter mellem applikationens domænemodel og databasen & Possible & Moderate & \cellcolor{yellow!30}Medium & Databaseændringer styres gennem automatiserede migrations-scripts (f.eks. EF Core Migrations), og dataadgangen valideres via integrationstests. \\
+    \hline
+    \rowcolor{gray!30}
+    Risiko 6: Sikkerhedsbrister i brugerhåndtering (Autentificering/Autorisation) & Unlikely & Significant & \cellcolor{yellow!30}Medium & I stedet for at bygge et system fra bunden, integreres en anerkendt standardløsning (f.eks. OAuth2 eller et etableret bibliotek). \\
+    \hline
+    Risiko 7: Inkonsistens i data ved samtidige forespørgsler (Concurrency) & Possible & moderate & \cellcolor{yellow!30}Medium & Databasen designes med eksplicitte transaktioner og korrekte isolationsniveauer. \\
     \hline
 \end{longtable}
 %TC:endignore
@@ -110,6 +110,6 @@ Analysen systematiseres i en risikomatrix, hvor de enkelte risici tildeles en "r
 
 \subsection*{Risici Konklusion}
 
-Da der ikke er nogen risici, der overstiger risikovurderingen Med High / High, vil gruppen fortsætte projektarbejdet som tidligere udtænkt. Der er dog faktorer, hvor gruppen skal være særlig opmærksom for at danne det bedste grundlag for et velfungerende semesterprojekt. Dette er hovedsageligt i udvælgelsen af den teknologi, der anvendes til at fuldføre projektet.
+Eftersom ingen af de identificerede risici overstiger niveauet "Medium High", vurderes det overordnede risikobillede at være acceptabelt. Projektet kan derfor fortsætte inden for de overordnede rammer, dog med den betingelse, at de definerede mitigeringsstrategier integreres aktivt i arbejdsgangen. Risikoanalysen viser, at gruppens primære opmærksomhedspunkt er udvælgelsen og valideringen af teknologistakken.
 
 \end{document}
