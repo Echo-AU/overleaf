@@ -1,5 +1,87 @@
 \documentclass[../main.tex]{subfiles}\begin{document}
 \section{Metode og process}
+\subsection{Process}
 
+En fuld beskrivelse af projektets proces og arbejdsgange findes i Bilag  $\rightarrow$ Procesbeskrivelse.
+
+\subsection{Metoder}
+Nedenfor uddybes de primære metoder og værktøjer, der anvendes til udviklingen af systemet.
+
+\subsubsection{Accepttestspecifikation}
+Vi anvender Gherkin-syntaksen til projektets accepttests. Gherkin binder forretningskrav og teknisk implementering sammen gennem sin "Givet-Når-Så" struktur, som gør det muligt at definere testbare scenarier i et naturligt sprog. Metoden sikrer, at vores User Stories afgrænses præcist, og at edge cases identificeres og håndteres tidligt i forløbet.
+
+\subsubsection{Arkitektur og design} 
+
+\paragraph{C4:} C4 modellen blev valgt til at definere SW-arkitekturen for projektet, på baggrund af dens relevans til semestrets øvrige kurser. Det var derfor oplagt at øge kendskabet til denne model og dets relevans til et større software projekt end præsenteret i yderligere kurser. 
+C4-modellen skaber en hierarkisk repræsentation af systemet. Arkitekturen er opdelt i fire niveauer, hvor systemet visualiseres på forskellige abstraktionsniveauer. For at lette forståelsen af disse diagrammer introduceres der diagramnøgler til arkitekturen.
+
+\subparagraph{Keys:} 
+Diagramnøgler viser, hvad de forskellige ikoner, former, farver og pile repræsenterer i C4-diagrammet. De bruges til at gøre diagrammet forståeligt og entydigt for alle, uanset om de kender systemet i forvejen.
+
+\subparagraph{Kontekstdiagram:} 
+Illustrerer relationen mellem systemet, aktører og eksterne systemer.
+
+\subparagraph{Containerdiagram:} 
+Viser de softwarekomponenter, der udgør systemet, samt deres indbyrdes relationer.
+
+\subparagraph{Komponentdiagram:}
+Angiver de interne komponenter i hver container og deres ansvar.
+
+\subparagraph{Kodediagrammer:}
+Til at diagrammere koden og gå fra arkitektur til design er der anvendt applikationsmodellering fra N+1 modellen. Fremgangsmåden for applikationsmodellerne har været iterativ og har fulgt følgende metode:
+\begin{enumerate}
+    \item Konceptuelt sekvensdiagram udarbejdes med indledende tanker vedrørende User Stories implementering. 
+    \item Indledende nødvendige klasser identificeres og placeres i tomt klassediagram uden metoder.
+    \item Funktionaliteter udvikles ud fra koncept.
+    \item Reelt sekvensdiagram opdateres med aktuelle metoder og fundne nødvendige lifelines/klasser.
+    \item Fundne nødvendige klasser og metoder placeres i udfyldt klassediagram, der viser den reelle implementation.
+\end{enumerate}
+
+Step 3 til 5 gentages indtil produktets funktionalitet gennemfører accepttest og dermed afspejler funktionalitet applikationsmodellen, og det indledende koncept er stadig tydeligt.
+
+\subsubsection{N+1}
+Til beskrivelsen af SW-arkitekturen og implementationen, blev N + 1 modellen valgt. Dette blev gjort på baggrund af en fælles forståelse for N + 1 modellen, samt dens evne til skabe en rød tråd fra arkitektur til produkt.
+N+1 er en metode inden for softwareudvikling, der benyttes til at beskrive og danne et overblik over arkitekturen af et softwaresystem fra flere forskellige perspektiver. I dette projekt anvendes Simon Brown's C4-model til at udpensle SW-arkitekturen, og de dokumenterede N+1 views indeholder derfor kun de aspekter, der relaterer sig til SW-design. Dette er gjort for at undgå gentagelser samt for at sikre en klar opdeling og hensigtsmæssig anvendelse af begge modeller.
+
+\paragraph{Logical View:} 
+Applikationsmodeller, der beskriver, hvordan SW Systemet er gået fra Arkitekturens koncept til reel implementering.
+
+\paragraph{Process View:} 
+Her beskrives processer og threads, deres ansvar, samarbejde og selve allokeringen af de logiske elementer (lagene, subsystemer osv.).
+
+\paragraph{Deployment View:} 
+Den fysiske udrulning af processer og komponenter til noder, og hvor den fysiske netværksforbindelse mellem noderne etableres. Altså beskrives de forskellige kommunikationsprotokoller.
+
+\paragraph{Data View:} 
+Her beskrives et overblik over de data, der bruges i systemet. Det kan være data flows, databaser, både nye og allerede eksisterende, tabeller osv.
+
+\paragraph{Security View:} 
+Under Security View beskrives systemets sikkerhed. Dette gøres ved hjælp af en gennemgang af de sikkerhedsordninger og punkter i arkitekturen, hvor sikkerhed anvendes, såsom HTTP-autentifikation, databaseautentifikation osv.
+
+\paragraph{Implementation View:} Her repræsenterer modellen den reelle source code samt beskriver de leverancer (Deliverables) og det, der skaber disse. I afsnittet sker desuden en opsummering over den væsentlige organisering af det tidligere nævnte.
+
+\paragraph{Development View:} 
+Her opsummeres de informationer, fremtidige udviklere har brug for at vide om opsætningen af udviklingsmiljøet.
+
+\subsubsection{Versionsstyringsværktøj}
+Github blev anvendt frem for Gitlab grundet dets store brugerbase og dets relevans for fremtidig praktik- og arbejdsrelationer.
+Samtidig implementerer Github yderligere QoL features, der har været spændende at arbejde med, bl.a. Github Security.
+Dette har sikret en struktureret
+og klar opdeling af kode. Der er anvendt branches til de forskellige features i projektet. Et link til GitHub projektet ses på dette link: \url{https://github.com/PRJ4SW4/Borgertinget}.
+
+\subsubsection{CI/CD}
+CI/CD er blevet implementeret, da dette er industry standard for SW-faget, og et ønske om øget erfaring med CI/CD blandt gruppens medlemmer.
+CI/CD faciliteres gennem GitHub. For backend og frontend er der opsat "GitHub Actions", som sikrer, at dele kompilerer, er fri for linting fejl, og at alle softwaretests består. Derefter er der oprettet et "GitHub Ruleset", som beskytter holdets "Main Branch" og sikrer følgende:
+\begin{itemize}
+    \item Main kræver lineær historik.
+    \item Main branchen kan ikke slettes.
+    \item Der kan ikke laves commits direkte til main. Der kræves et PR, der er reviewet af mindst én anden.
+    \item Alle "GitHub Actions" skal være gennemkørt, inden der kan merges med main.
+    \item Der kan ikke laves "Merge Commits" til main - udelukkende "Squash and Rebase".
+    \item Git's "force" parameter kan ikke anvendes på main.
+    \item Tilkobl GitHub's "CodeQL" skanning på alle PR's til main. Dette skanner efter lækkede environment filer, dårlig code practice, injection attacks og generelle mangler, der kunne være sikkerhedsrisici og advarer om disse ved PR.
+\end{itemize}
+
+Dette sikrer et system, som understøtter konstant integration gennem PR's, der reviewes og scannes for problemer. Testing strategien, der er anvendt, adskiller sig dog fra ren CI/CD. Dette gennemgås i detaljer under testafsnittet.
 
 \end{document}
