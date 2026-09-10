@@ -1,49 +1,110 @@
-\documentclass[../C-analyse.tex]{subfiles}\begin{document}
-\section{Deployment}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{IMG/BILAG/TEKNISKANALYSE/deploy-mock.png}
-    \caption{Mock deploy}
-    \label{fig:mock-deploy}
-\end{figure}
+\documentclass[../C-Analyse.tex]{subfiles}\begin{document}
+\section{UI/UX analyse}
 
-Følgende beskriver bla bla bla. Der er lavet en analyse på baggrund af følgende valg: bla bla bla.
+\subsection{Formål og afgrænsning}
+Analysen omsætter user stories i kravspecifikationen til et forslag til GUI'ens sider, indhold og brugerflows. Målet er at fastlægge, hvilke views der skal laves mockups af, og hvordan de understøtter brugernes handlinger. Et view forstås her som en samlet skærmvisning. En dialog eller en fane kan understøtte en handling uden at kræve en selvstændig side.
 
-\subsection{Krav}
-Hvad har \textbf{jeres produkt} brug for?\\
-Eksemple: Backend-teknologien skal understøtte REST API'er, authentication, relationel databaseadgang og asynkron behandling. Da projektets udviklingsperiode er begrænset, prioriteres development speed og eksisterende kompetencer højt.
+Forslaget bygger på fælles sider med rollebestemt indhold, da flere brugerroller arbejder med de samme opgaver, profiler og transaktioner. De konkrete felter, statusnavne og dialoger nedenfor er designforslag udledt af kravene, ikke yderligere vedtagne krav. MoSCoW-tabellen i kravspecifikationen anvendes som foreløbigt prioriteringsgrundlag, da tabellen selv er markeret som et eksempel, der skal rettes.
 
-\subsection*{Kandidater}
-Eksemple: ASP.NET Core, Go og Node.js.
+\subsection{Brugerroller og navigation}
+Navigationen skal tage udgangspunkt i den enkelte brugers formål og kun vise relevante funktioner, jf. US-04. Følgende menupunkter foreslås:
+\begin{itemize}
+    \item \textbf{Contributor:} Find opgaver, Mine opgaver, Belønninger samt Saldo og historik. Brugeren skal hurtigt kunne finde en opgave, følge sin deltagelse og anvende optjente Karma Koins.
+    \item \textbf{Requester:} Mine opgaver, Opret opgave samt Saldo og historik. Fokus er at beskrive et behov, vælge deltagere og betale efter udførelse.
+    \item \textbf{Organization:} Mine aktiviteter, Opret aktivitet samt Saldo og historik. Fokus er at offentliggøre aktiviteter, håndtere deltagere og overføre Karma Koins.
+    \item \textbf{Reward Partner:} Mine belønninger, Opret belønning samt Saldo og historik med det indhold, der er relevant for kontotypen. Fokus er at oprette tilbud, som kan indløses med Karma Koins.
+\end{itemize}
+Alle roller har desuden adgang til egen profil og log ud. Da US-01 beskriver Contributor/Requester som én kontotype, foreslås det, at denne konto kan tilgå begge arbejdsområder. Opgaver, brugeren selv har oprettet, adskilles fra opgaver, brugeren deltager i, med faner under Mine opgaver. Den endelige sammenhæng mellem kontotype og rettigheder skal afklares.
 
-\subsection*{Kriterier}
-Definer kriterier for teknologien
+Et særskilt dashboard vurderes ikke nødvendigt i første version. Contributor kan lande på Find opgaver, mens Organization, Requester og Reward Partner kan lande på deres eget oversigtsview. Det giver direkte adgang til en central handling uden en ekstra oversigt, som gentager andre sider. Skjulte menupunkter er alene en hjælp til navigation; systemet skal også kontrollere rettigheder ved adgang til sider og udførelse af handlinger.
 
-\subsection*{Analyse}
-Diskuter teknologiernes faktiske styrker og svagheder.
+\subsection{Foreslåede views og sporbarhed}
+Følgende 11 sidetyper dækker user stories. Rollevarianter og dialoger beskrives under den side, hvor handlingen foregår, så der ikke oprettes en ny side for hver user story.
 
-\subsection{Scoring}
-\begin{tabular}{|l|l|l|l|l|}
-    \hline
-    \rowcolor{gray!30}
-    \textbf{Kriterie} & \textbf{Vægt} & \textbf{Tek 1} & \textbf{Tek 2} & \textbf{Tek 3}\\
-    \hline
-    Projekt fit & 25\% & - & - & - \\
-    \hline
-    Udviklingshastighed & 20\% & - & - & - \\
-    \hline
-    Maintainability & 15\% & - & - & - \\
-    \hline
-    Performance & 10\% & - & - & - \\
-    \hline
-    Ecosystem & 10\% & - & - & - \\
-    \hline
-    Team kompetence & 20\% & - & - & - \\
-    \hline
-    \rowcolor{gray!30}
-    Vægtet scorer & 100\% & - & - & - \\
-    \hline
-\end{tabular}
+\subsubsection{V01 -- Opret konto og log ind}
+\textbf{Grundlag: US-01 og US-04 samt IFK1.2.}
+Viewet indeholder valg af kontotype og de oplysninger, der kræves for at oprette kontoen. Hver kontotype forklares kort med dens formål, eksempelvis at en Contributor kan hjælpe med opgaver. Login foreslås som en selvstændig visning i samme adgangsflow; det er en nødvendig støttefunktion, selv om login ikke er en selvstændig user story. En popup er valgfri efter IFK2.2. Formularfejl vises ved det relevante felt. Ved udløbet session forklares behovet for at logge ind igen, hvorefter brugeren så vidt muligt føres tilbage til den ønskede side.
 
-\subsection*{Beslutning}
+\subsubsection{V02 -- Min profil}
+\textbf{Grundlag: US-02 og US-04.}
+Brugeren kan se og vedligeholde relevante profiloplysninger. Navn og beskrivelse foreslås som fælles felter, mens øvrige felter afhænger af kontotypen. Viewet skal skelne tydeligt mellem oplysninger, andre brugere kan se, og private kontooplysninger. Gem-handlingen giver en synlig bekræftelse. Profilredigering er foreløbigt Could og kan udskydes uden at blokere konto-oprettelsen.
+
+\subsubsection{V03 -- Brugerprofil og omdømme}
+\textbf{Grundlag: US-17; understøtter US-09a og US-09b.}
+En anden brugers profil viser vedkommendes navn, rolle, offentlige beskrivelse og omdømme. Hvis ratings implementeres, foreslås samlet vurdering, antal anmeldelser og de enkelte anmeldelser. Ingen anmeldelser skal vises som en neutral tomtilstand, ikke som en dårlig vurdering. Profilen åbnes fra eksempelvis opgavens afsender eller deltagerlisten, så omdømmet kan indgå i beslutningen om et samarbejde. Private kontooplysninger og transaktioner vises ikke her.
+
+\subsubsection{V04 -- Find opgaver}
+\textbf{Grundlag: US-08a og US-08b.}
+Contributor får en liste over tilgængelige opgaver. Hvert listeelement foreslås at vise titel, afsender, kort beskrivelse og belønning med tydelig enhed. Tidspunkt og sted vises, hvis disse oplysninger indgår i opgaven. En enkel søgning og filtrering efter opgavetype foreslås som hjælp til at finde relevante opgaver. Organizations aktiviteter og Requesters opgaver skal kunne skelnes, især fordi de belønnes forskelligt. Valg af en opgave åbner V05. En tom liste forklarer, om der mangler opgaver, eller om filtrene ikke giver resultater.
+
+\subsubsection{V05 -- Opgave- og aktivitetsdetaljer}
+\textbf{Grundlag: US-05--US-09b, US-11a, US-11b, US-12, US-13 og US-16.}
+Dette er det centrale arbejdsview. Det viser opgavens fulde beskrivelse, afsender, belønning, status og eventuelle oplysninger om tid, sted og antal deltagere. Den primære handling afhænger af brugerens rolle, relation til opgaven og opgavens status:
+\begin{itemize}
+    \item \textbf{Contributor} kan tilbyde sin hjælp og derefter se, om tilbuddet afventer svar, eller om vedkommende er valgt.
+    \item \textbf{Opgavens ejer} kan åbne en deltagerfane, se modtagne tilbud, besøge profiler og vælge en eller flere Contributors. Deltagerhåndtering samles her frem for på en separat side.
+    \item \textbf{Organization eller Requester} kan gennemføre det relevante afslutningsflow, når betingelserne er opfyldt. En bekræftelsesdialog viser modtagere og beløb før overførsel af Karma Koins eller betaling. Opgavens udførelsesstatus og transaktionens status vises hver for sig, så en betalingsfejl ikke skjules af teksten ``udført''.
+    \item \textbf{Berettigede deltagere} kan efter fuldførelse åbne en anmeldelsesdialog med valg af modtager, vurdering og eventuel kommentar. Dialogen understøtter US-16 og behøver ikke en selvstændig side.
+\end{itemize}
+US-08 omtaler accept, mens US-09 kræver, at ejeren vælger blandt tilbud. Derfor foreslås knappen ``Tilbyd hjælp'' og tilstanden ``Afventer svar'', indtil ejeren har tildelt opgaven. Denne fortolkning skal afklares, før mockups fastlåses. En tilmelding må ikke fremstå som en bekræftet tildeling, hvis den stadig kræver ejerens valg.
+
+\subsubsection{V06 -- Opret opgave eller aktivitet}
+\textbf{Grundlag: US-05 og US-07.}
+En fælles formular tilpasses Organization og Requester. Felterne foreslås at omfatte titel, beskrivelse, rammer for udførelse, eventuelt deltagerantal og belønning. Organizations bruger Karma Koins, mens Requesters bruger den aftalte valuta for penge; valutaen skal være tydelig og kan ikke fastlægges ud fra kravspecifikationen alene. En forhåndsvisning før offentliggørelse hjælper brugeren med at kontrollere oplysningerne. Efter oprettelse føres brugeren til V05 med en bekræftelse. Redigering, kladder og sletning er ikke specificeret i de nuværende user stories og indgår derfor ikke som selvstændige flows her.
+
+\subsubsection{V07 -- Mine opgaver eller aktiviteter}
+\textbf{Grundlag: US-05--US-09b og US-11a--US-13.}
+Viewet samler de opgaver, brugeren ejer eller deltager i. Contributor kan skelne mellem tilbud, tildelte opgaver og udførte opgaver. Organization og Requester kan se egne opgaver og markeringer af, hvor der afventes valg af deltagere eller afslutning. Valg af et element åbner V05 med de relevante handlinger. En tomtilstand peger på Find opgaver eller Opret opgave afhængigt af rollen. Viewet er en afledt navigationsløsning, som gør eksisterende user stories tilgængelige over tid.
+
+\subsubsection{V08 -- Saldo og transaktionshistorik}
+\textbf{Grundlag: US-03, US-11a, US-11b, US-12, US-13 og US-15.}
+Viewet viser relevante saldi og en historik med dato, beløb, enhed, transaktionstype, modpart og status. Karma Koins og penge skal vises adskilt, så de ikke opfattes som én samlet saldo. En transaktion kan foldes ud med detaljer og henvisning til den tilknyttede opgave eller belønning. Optjening, overførsel, betaling og indløsning skal kunne genkendes i historikken. Kravene angiver, at indholdet afhænger af kontotypen, men fastlægger ikke præcist, hvilke saldi Organization og Reward Partner har; det skal afklares før detaljering.
+
+\subsubsection{V09 -- Belønningskatalog}
+\textbf{Grundlag: US-14.}
+Contributor kan gennemse belønninger med titel, Reward Partner, kort beskrivelse og pris i Karma Koins. Den aktuelle saldo vises som støtte til valget. Belønninger, der koster mere end saldoen, kan stadig vises, men forskellen skal fremgå. Valg af en belønning åbner V10.
+
+\subsubsection{V10 -- Belønningsdetaljer og indløsning}
+\textbf{Grundlag: US-10 og US-15.}
+Viewet viser belønningen, partneren, prisen og vilkårene for at modtage varen eller tjenesten. En indløsningsdialog opsummerer pris og forventet restsaldo, før brugeren bekræfter. Ved utilstrækkelig saldo forklares, hvorfor indløsning ikke er mulig. Ved succes vises en kvittering og næste skridt hos partneren. Kravene fastlægger ikke, om dette kræver eksempelvis en kode eller en manuel bekræftelse; mockuppet skal derfor markere denne del som uafklaret frem for at fastlåse en indløsningsmekanisme.
+
+\subsubsection{V11 -- Mine belønninger og oprettelse}
+\textbf{Grundlag: US-10.}
+Reward Partner får en oversigt over egne oprettede belønninger og en tydelig handling til at oprette en ny. Oprettelsesformularen kan være et særskilt view under oversigten og foreslås at indeholde titel, beskrivelse, pris i Karma Koins og indløsningsvilkår. Efter oprettelse vises en bekræftelse og belønningens oplysninger. Oversigten er afledt af behovet for at finde det oprettede indhold igen. Lagerstyring, kampagnestatistik og administration af indløsningskoder er ikke beskrevet i user stories og indgår ikke i forslaget.
+
+\subsection{Sammenhængende brugerflows}
+Mockups skal vise hele forløb på tværs af siderne, så det kan vurderes, om brugeren forstår næste handling:
+\begin{enumerate}
+    \item \textbf{Frivilligt bidrag:} Contributor åbner Find opgaver (V04), læser detaljerne (V05) og tilbyder hjælp. Organization vælger deltagere i V05. Contributor følger tildelingen i Mine opgaver (V07). Efter udførelse og opfyldelse af de aftalte betingelser overfører Organization Karma Koins via V05, og Contributor kan se resultatet i V08.
+    \item \textbf{Betalt opgave:} Requester opretter en opgave i V06 og vælger en Contributor i V05. Efter udførelse markerer Requester opgaven udført og gennemfører det tilknyttede betalingsflow, jf. US-13. Resultatet fremgår af V05 og V08. Dette forløb er foreløbigt Should.
+    \item \textbf{Anvendelse af belønning:} Reward Partner opretter en belønning i V11. Contributor finder den i V09, kontrollerer vilkårene i V10 og bekræfter indløsningen. Kvitteringen vises i V10, og transaktionen kan findes i V08.
+    \item \textbf{Omdømme:} Efter en fuldført opgave åbner brugeren anmeldelsesdialogen i V05. Anmeldelsen kan derefter ses på modtagerens profil i V03. Dette forløb er foreløbigt Could.
+\end{enumerate}
+
+\subsection{Fælles UX-principper og tilstande}
+For at understøtte IFK2.1 foreslås konsekvente danske betegnelser og én tydelig primær handling pr. arbejdstrin. Eksempelvis bruges ``Belønninger'' i navigationen og ``Karma Koins'' som enhed. Farve suppleres med tekst ved status og fejl, og formularer får synlige feltnavne og mulighed for tastaturbetjening. Det er designforslag til at gøre handlingerne forståelige og tilgængelige, ikke dokumentation for allerede opnået brugervenlighed.
+
+Mobilvisningen, jf. IFK2.4, skal prioritere de samme handlinger som desktop. Lister kan vises som kort, formularer samles i én kolonne, og dialoger skal kunne bruges på en smal skærm. En separat mobilapp er ikke nødvendig for disse flows. Et enkelt dansk grænsefladesprog foreslås i overensstemmelse med IFK2.3.
+
+Hvert centralt view skal have en indlæsningstilstand, en tomtilstand og en fejltilstand. Under indsendelse vises, at handlingen behandles, og gentagne klik begrænses. En overførsel eller indløsning må først vises som gennemført, når systemet har bekræftet resultatet. Hvis resultatet er ukendt efter en forbindelsesfejl, skal grænsefladen oplyse dette og kontrollere status, før brugeren forsøger igen. GUI'en kan understøtte dette, men kan ikke alene forhindre dobbelte transaktioner.
+
+Fejl skal afgrænses til den berørte funktion efter IFK3.1, så eksempelvis et utilgængeligt belønningskatalog ikke blokerer Mine opgaver. Indlæsningsfeedback understøtter oplevelsen under ventetid, men erstatter ikke måling af kravene til sideindlæsning og API-responstid i IFK4.1 og IFK4.2.
+
+\subsection{Prioritering af mockups og åbne spørgsmål}
+Første mockup-runde bør dække Must-forløbene: konto-oprettelse (V01), opgaver fra Organization (V04--V07), Karma Koins og historik (V08) samt oprettelse og indløsning af belønninger (V09--V11). V05 skal tegnes både som Contributor og som Organization samt før og efter tildeling og udførelse. V10 skal vises med tilstrækkelig saldo, utilstrækkelig saldo og gennemført indløsning. V11 skal vises både som oversigt og som oprettelsesformular. Dermed består mockup-arbejdet af flere skærmbilleder end antallet af sidetyper.
+
+Anden runde udvider de fælles opgaveviews med Requester og betaling i penge. Tredje runde tilføjer profilredigering (V02), omdømme (V03) og anmeldelsesdialogen. Denne rækkefølge følger den foreløbige MoSCoW-tabel og skal justeres, når prioriteringen er endeligt vedtaget.
+
+Før detaljedesignet færdiggøres, skal følgende afklares:
+\begin{itemize}
+    \item Om tilmelding altid kræver ejerens efterfølgende valg, eller om nogle aktiviteter tillader direkte accept.
+    \item Hvem der bekræfter udførelsen af en aktivitet, og hvilke betingelser der udløser status ``udført'', særligt når der er flere Contributors.
+    \item Hvordan beløbet fordeles mellem flere deltagere, og hvordan afslutning hænger sammen med overførsel eller betaling ved fejl.
+    \item Hvilke rettigheder Contributor/Requester-kontoen har, og hvilke saldi og transaktioner der er relevante for hver kontotype.
+    \item Hvordan en fysisk vare eller tjeneste udleveres efter indløsning, og hvordan partneren verificerer indløsningen.
+    \item Hvem der kan anmelde hvem efter en opgave, og hvilken vurderingsskala der anvendes. US-16's brede betegnelse User afgør eksempelvis ikke Reward Partners adgang til at anmelde.
+\end{itemize}
+
+Mockups kan efterfølgende vurderes med konkrete opgaver: Kan en ny bruger finde og tilbyde hjælp til en aktivitet, kan en Organization vælge deltagere og afslutte opgaven, og kan en Contributor indløse en belønning og finde transaktionen bagefter? Vurderingen skal især undersøge, om brugeren forstår forskellen på at tilbyde hjælp og være valgt, kan skelne Karma Koins fra penge og kan se, om en handling er gennemført. Der er her tale om forslag til validering; analysen indeholder ikke gennemførte brugertests.
+
 \end{document}
